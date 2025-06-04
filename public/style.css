@@ -281,7 +281,11 @@ main button a {
   gap: 30px;
   justify-content: space-between;
 }
-
+.footer-bottom p a{
+  color: #f4fdf1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 .footer-about,
 .footer-links,
 .footer-contact,
