@@ -27,22 +27,33 @@ function successMessage() {
       text-align: center;
       font-family: 'Segoe UI', 'Poppins', sans-serif;
       color: #2e7d32;
-      max-width: 600px;
+      max-width: 700px;
       margin: 50px auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
     ">
-      <h2 style="font-size: 26px; margin-bottom: 15px;">✅ Order Placed Successfully!</h2>
-      <p style="font-size: 16px; color: #388e3c; margin-bottom: 25px;">
-        We've received your order. A confirmation has been sent to your email.
+      <h2 style="font-size: 28px; margin-bottom: 15px;">✅ Your Order Has Been Successfully Placed!</h2>
+      
+      <p style="font-size: 16px; color: #2e7d32; margin-bottom: 20px;">
+        Thank you for your purchase! We’ve received your order details and sent a confirmation email to your provided address.
       </p>
+      
+      <p style="font-size: 15px; color: #4caf50; margin-bottom: 15px;">
+        📩 <strong>Check your inbox</strong> for order details. If you don’t see it within a few minutes, please check your <strong>Spam or Promotions</strong> folder too.
+      </p>
+      
+      <p style="font-size: 14px; color: #666; margin-bottom: 30px;">
+        If the email is in spam, mark it as "Not Spam" to ensure you receive future updates smoothly.
+      </p>
+      
       <a href="/" style="
         display: inline-block;
-        padding: 10px 20px;
+        padding: 12px 24px;
         background-color: #2e7d32;
         color: #fff;
         text-decoration: none;
-        border-radius: 6px;
-        font-weight: 500;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
         transition: background-color 0.3s ease;
       " onmouseover="this.style.backgroundColor='#1b5e20'" onmouseout="this.style.backgroundColor='#2e7d32'">
         ⬅️ Back to Home
@@ -50,6 +61,7 @@ function successMessage() {
     </div>
   `;
 }
+
 app.post("/send-order", async (req, res) => {
   const { name, phone, email, address, orderHTML } = req.body;
 
@@ -115,7 +127,7 @@ app.post("/send-order", async (req, res) => {
 
   const mailToUser = {
     from: `"Shivansh Krushi Seva Kendra" <${GMAIL_USER}>`,
-    to: "furangesales@gmail.com",
+    to: email,
     subject: "🛍️ Order Confirmation",
     html: userHtmlBody,
   };
