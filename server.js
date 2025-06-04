@@ -3,7 +3,7 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+const ADMIN_EMAIL_2 = process.env.ADMIN_EMAIL_2; // Replace with your 2nd admin email
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_PASS;
 
@@ -50,7 +50,6 @@ function successMessage() {
     </div>
   `;
 }
-
 app.post("/send-order", async (req, res) => {
   const { name, phone, email, address, orderHTML } = req.body;
 
@@ -63,43 +62,70 @@ app.post("/send-order", async (req, res) => {
     auth: { user: GMAIL_USER, pass: GMAIL_PASS },
   });
 
-  const htmlBody = `
-  <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #f4fdf1; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #d0e6d1;">
-    <h2 style="color: #2e7d32; border-bottom: 2px solid #66bb6a; padding-bottom: 10px; margin-bottom: 20px;">🛒 New Order Received</h2>
-    
-    <div style="margin-bottom: 25px;">
-      <h3 style="color: #388e3c; font-size: 20px;">👤 Customer Details</h3>
-      <p><strong>Name:</strong> ${escapeHTML(name)}</p>
-      <p><strong>Phone:</strong> ${escapeHTML(phone)}</p>
-      <p><strong>Email:</strong> <a href="mailto:${escapeHTML(
-        email
-      )}" style="color: #2e7d32;">${escapeHTML(email)}</a></p>
-      <p><strong>Address:</strong><br>${escapeHTML(address).replace(
-        /\n/g,
-        "<br>"
-      )}</p>
+  // HTML email to send to you (admin)
+  const adminHtmlBody = `
+    <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #f4fdf1; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #d0e6d1;">
+      <h2 style="color: #2e7d32; border-bottom: 2px solid #66bb6a; padding-bottom: 10px; margin-bottom: 20px;">🛒 New Order Received</h2>
+      <div style="margin-bottom: 25px;">
+        <h3 style="color: #388e3c; font-size: 20px;">👤 Customer Details</h3>
+        <p><strong>Name:</strong> ${escapeHTML(name)}</p>
+        <p><strong>Phone:</strong> ${escapeHTML(phone)}</p>
+        <p><strong>Email:</strong> <a href="mailto:${escapeHTML(
+          email
+        )}" style="color: #2e7d32;">${escapeHTML(email)}</a></p>
+        <p><strong>Address:</strong><br>${escapeHTML(address).replace(
+          /\n/g,
+          "<br>"
+        )}</p>
+      </div>
+      <div>
+        <h3 style="color: #388e3c; font-size: 20px; margin-bottom: 10px;">📦 Order Summary</h3>
+        ${orderHTML || "<p>No cart items found.</p>"}
+      </div>
+      <div style="margin-top: 30px; text-align: center;">
+        <p style="font-size: 14px; color: #777;">This order was submitted from your website. Please process it accordingly.</p>
+      </div>
     </div>
+  `;
 
-    <div>
-      <h3 style="color: #388e3c; font-size: 20px; margin-bottom: 10px;">📦 Order Summary</h3>
+  // HTML email to send to user
+  const userHtmlBody = `
+    <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #e8f5e9; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #c8e6c9;">
+      <h2 style="color: #2e7d32;">🎉 Thank You for Your Order, ${escapeHTML(
+        name
+      )}!</h2>
+      <p>We're happy to confirm your order. Here's a quick summary:</p>
+      <h3 style="color: #388e3c;">📦 Order Summary</h3>
       ${orderHTML || "<p>No cart items found.</p>"}
+      <p style="margin-top: 20px;">We'll reach out to you shortly at <strong>${escapeHTML(
+        phone
+      )}</strong> or <a href="mailto:${escapeHTML(email)}">${escapeHTML(
+    email
+  )}</a></p>
+      <p style="margin-top: 20px; font-size: 13px; color: #666;">If you have any questions, reply to this email.</p>
     </div>
+  `;
 
-    <div style="margin-top: 30px; text-align: center;">
-      <p style="font-size: 14px; color: #777;">This order was submitted from your website. Please process it accordingly.</p>
-    </div>
-  </div>
-`;
-
-  const mailOptions = {
+  const mailToAdmin = {
     from: `"Order Bot" <${GMAIL_USER}>`,
-    to: GMAIL_USER,
+    to: `${GMAIL_USER}, ${ADMIN_EMAIL_2}`, // Sends to you and second admin
     subject: "New Order Received",
-    html: htmlBody,
+    html: adminHtmlBody,
+  };
+
+  const mailToUser = {
+    from: `"Shivansh Krushi Seva Kendra" <${GMAIL_USER}>`,
+    to: "furangesales@gmail.com",
+    subject: "🛍️ Order Confirmation",
+    html: userHtmlBody,
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    // Send admin email and user confirmation email in parallel
+    await Promise.all([
+      transporter.sendMail(mailToAdmin),
+      transporter.sendMail(mailToUser),
+    ]);
     res.send(successMessage());
   } catch (err) {
     console.error("Mail error:", err);
