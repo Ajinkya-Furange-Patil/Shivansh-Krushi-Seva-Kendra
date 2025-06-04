@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      .cart-container {
+        max-width: 960px;
+        margin: 100px auto 40px auto;
+        background-color: #ffffff;
+        padding: 30px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+      }
+
+      .cart-container h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+        color: #2e7d32;
+        text-align: center;
+      }
+
+      .cart-container h3 {
+        margin: 30px 0 15px;
+        color: #1b5e20;
+        font-size: 22px;
+      }
+
+      #cart-items {
+        margin-bottom: 20px;
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .cart-item img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #c8e6c9;
+      }
+
+      .cart-item-details {
+        flex: 1;
+      }
+
+      .cart-item-details h4 {
+        margin: 0;
+        font-size: 18px;
+        color: #2e7d32;
+      }
+
+      .cart-item-details p {
+        margin: 5px 0;
+        font-size: 15px;
+      }
+
+      .cart-item input[type="number"] {
+        width: 60px;
+        padding: 4px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .cart-item button {
+        background-color: #e53935;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .cart-item button:hover {
+        background-color: #c62828;
+      }
+
+      #cart-total {
+        text-align: right;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 20px;
+        color: #1b5e20;
+      }
+
+      /* Order Form */
+      #orderForm {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      #orderForm input,
+      #orderForm textarea {
+        padding: 12px;
+        border: 1px solid #c8e6c9;
+        border-radius: 6px;
+        font-size: 15px;
+        font-family: "Poppins", sans-serif;
+        width: 100%;
+        background-color: #f9fff9;
+      }
+
+      #orderForm textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+
+      .place-order-btn {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        width: 100%;
+        max-width: 200px;
+        align-self: flex-end;
+      }
+
+      .place-order-btn:hover {
+        background-color: #1b5e20;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .cart-item {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .cart-item img {
+          margin-bottom: 10px;
+        }
+
+        #cart-total {
+          text-align: center;
+        }
+
+        .place-order-btn {
+          align-self: center;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo">Shivansh Krushi Seva Kedra</div>
+      <ul id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact-us.html">Contact</a></li>
+        <li><a href="#">Cart</a></li>
+        <li><a href="account.html">Account</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+      </div>
+    </nav>
+    <div class="cart-container">
+      <h2>Your Shopping Cart</h2>
+      <div id="cart-items"></div>
+      <div id="cart-total"></div>
+
+      <form id="orderForm" action="/send-order" method="POST">
+        <h3>Enter Your Details</h3>
+        <input name="name" required placeholder="Your Name" />
+        <input name="phone" required placeholder="Phone" />
+        <input name="email" required placeholder="Email" />
+        <textarea name="address" required placeholder="Your Address"></textarea>
+
+        <!-- Cart order HTML -->
+        <input type="hidden" name="orderHTML" id="orderHTML" />
+        <button type="submit" class="place-order-btn">Place Order</button>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-container">
+        <!-- About Section -->
+        <div class="footer-about">
+          <h3>About Organic Farming Store</h3>
+          <p>
+            We provide quality farming products — from certified seeds and
+            eco-friendly fertilizers to essential tools and equipment — helping
+            farmers grow healthy, sustainable crops with confidence.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">All Products</a></li>
+            <li><a href="contact-us.html">Contact Us</a></li>
+            <li><a href="faq.html">Support & FAQs</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="footer-contact">
+          <h3>Contact Us</h3>
+          <p>
+            Dynaneshwar Kachale, Near Hanuman Mandir, Varchya Vada, Tulanga Bk.,
+            Akola, Maharastra, India
+          </p>
+          <p>Phone: +91 9011102731</p>
+          <p>
+            Email:
+            <a href="mailto:furangeaditya@gmail.com">furangeaditya@gmail.com</a>
+          </p>
+        </div>
+
+        <!-- Newsletter & Social -->
+        <div class="footer-newsletter">
+          <h3>Subscribe for Farming Tips & Offers</h3>
+          <form
+            id="newsletter-form"
+            action="https://formspree.io/f/mkgwwdzp"
+            method="POST"
+          >
+            <input
+              type="email"
+              name="email"
+              placeholder="Your email address"
+              required
+            />
+            <button type="submit" id="subscribe">Subscribe</button>
+          </form>
+          <div class="social-icons">
+            <a href="#" aria-label="Facebook" title="Facebook"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" aria-label="Twitter" title="Twitter"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a href="#" aria-label="Instagram" title="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" aria-label="LinkedIn" title="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>© 2025 Shivansh Krushi Seva Kendra. All rights reserved.</p>
+      </div>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="cart.js"></script>
+    <script src="nav.js"></script>
+  </body>
+</html>
