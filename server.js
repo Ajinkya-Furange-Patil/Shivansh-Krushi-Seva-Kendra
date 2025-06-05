@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_EMAIL_2 = process.env.ADMIN_EMAIL_2; // Replace with your 2nd admin email
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_PASS;
-app.use(require("compression")());
+// app.use(require("compression")());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public")); // Important!
