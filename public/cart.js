@@ -7,7 +7,7 @@ function renderCart() {
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = `
       <p class="empty-cart">
-        Your cart is empty. <a href="/Shivansh-Kendra/products.html">Go to products</a>
+        Your cart is empty. <a href="products.html">Go to products</a>
       </p>`;
     cartTotalDisplay.textContent = '';
     return;
