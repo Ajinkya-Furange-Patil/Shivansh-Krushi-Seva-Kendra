@@ -3,8 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="images/logo.png" type="images/x-icon" />
+    <link rel="apple-touch-icon" href="images/logo.png" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="description"
+      content="Buy high-quality organic farming products like fertilizers, seeds, and tools at Shivansh Krushi Seva Kendra with fast delivery and support."
+    />
+    <meta
+      name="keywords"
+      content="organic farming, fertilizers, seeds, krushi seva, agriculture tools, Shivansh Krushi Seva Kendra, Akola"
+    />
+    <meta name="author" content="Shivansh Krushi Seva Kendra" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <meta name="theme-color" content="#2e7d32" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shivansh Krushi Seva Kendra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
@@ -13,14 +34,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
     <!-- Navbar -->
     <nav class="navbar">
-      <div class="logo">Shivansh Krushi Seva Kedra</div>
+      <div class="logo">Shivansh Krushi Seva Kendra</div>
       <ul id="nav-links">
         <li><a href="#">Home</a></li>
         <li><a href="products.html">Products</a></li>
@@ -35,19 +55,19 @@
 
     <!-- Info Row -->
     <div class="info-row">
-      <div class="info-box box1" data-aos="fade-right">
+      <div class="info-box box1">
         <div class="text">
           <i class="fa fa-plane"></i>
           <p>Shipping charges included on orders over</p>
         </div>
       </div>
-      <div class="info-box box2" data-aos="zoom-in">
+      <div class="info-box box2">
         <div class="text">
           <i class="fa fa-history"></i>
           <p>7-Day returns money back</p>
         </div>
       </div>
-      <div class="info-box box3" data-aos="fade-left">
+      <div class="info-box box3">
         <div class="text">
           <i class="fa fa-headphones" aria-hidden="true"></i>
           <p>24/7 Support</p>
@@ -63,13 +83,13 @@
       <!-- Product Cards -->
       <section>
         <div class="row">
-          <div class="card" data-aos="zoom-in-down">
+          <div class="card">
             <img src="images/CropSaff.webp" alt="Crop Staff" />
             <h3>Crop Saff</h3>
             <p>₹320</p>
             <button>Add To Cart</button>
           </div>
-          <div class="card" data-aos="zoom-in-down">
+          <div class="card">
             <img
               src="images/Guard(Crystal).webp"
               alt="Guard (Crystal)"
@@ -79,13 +99,13 @@
             <p>₹950</p>
             <button>Add To Cart</button>
           </div>
-          <div class="card" data-aos="zoom-in-down">
+          <div class="card">
             <img src="images/shaked.webp" alt="Shaked" height="250rem" />
             <h3>SHAKED HERBICIDE ME</h3>
             <p>₹1050</p>
             <button>Add To Cart</button>
           </div>
-          <div class="card" data-aos="zoom-in-down">
+          <div class="card">
             <img
               src="images/Targa Super.webp"
               alt="Targa Super"
@@ -97,7 +117,7 @@
           </div>
         </div>
       </section>
-      <button data-aos="fade-up">
+      <button>
         <a href="products.html"> Discover More Products</a>
       </button>
     </main>
@@ -105,7 +125,7 @@
     <!-- Static Bottom Info Cards -->
     <div class="static-bottom">
       <!-- Organic Store Info -->
-      <div class="info-card box1" data-aos="fade-up-right">
+      <div class="info-card box1">
         <div class="box-inner">
           <div class="text">
             <h3>Organic Farming Store</h3>
@@ -118,7 +138,7 @@
       </div>
 
       <!-- Contact Info -->
-      <div class="info-card box3"data-aos="zoom-in-up">
+      <div class="info-card box3">
         <div class="box-inner">
           <div class="text">
             <h3>Contact Information</h3>
@@ -137,12 +157,18 @@
                 >
               </p>
             </div>
-            <a class="shop-now" href="contact-us.html">Read more</a>
+            <a
+              class="shop-now"
+              href="contact-us.html"
+              aria-label="Go to details"
+            >
+              Read more <i class="fa fa-arrow-right"></i
+            ></a>
           </div>
         </div>
       </div>
       <!-- Open Hours Info -->
-      <div class="info-card box2" data-aos="fade-up-left">
+      <div class="info-card box2">
         <div class="box-inner">
           <div class="text">
             <h3>Open Hours</h3>
@@ -159,7 +185,7 @@
     <footer class="site-footer">
       <div class="footer-container">
         <!-- About Section -->
-        <div class="footer-about" data-aos="fade-right">
+        <div class="footer-about">
           <h3>About Organic Farming Store</h3>
           <p>
             We provide quality farming products — from certified seeds and
@@ -169,7 +195,7 @@
         </div>
 
         <!-- Quick Links -->
-        <div class="footer-links" data-aos="fade-up">
+        <div class="footer-links">
           <h3>Quick Links</h3>
           <ul>
             <li><a href="index.html">Home</a></li>
@@ -180,7 +206,7 @@
         </div>
 
         <!-- Contact Information -->
-        <div class="footer-contact" data-aos="fade-left">
+        <div class="footer-contact">
           <h3>Contact Us</h3>
           <p>
             Dynaneshwar Devendra Kachale, Near Maruti Mandir, Tulanga Bk.,
@@ -194,7 +220,7 @@
         </div>
 
         <!-- Newsletter & Social -->
-        <div class="footer-newsletter" data-aos="fade-up">
+        <div class="footer-newsletter">
           <h3>Subscribe for Farming Tips & Offers</h3>
           <form
             id="newsletter-form"
@@ -209,7 +235,7 @@
             />
             <button type="submit" id="subscribe">Subscribe</button>
           </form>
-          <div class="social-icons" data-aos="zoom-in-up">
+          <div class="social-icons">
             <a href="#" aria-label="Facebook" title="Facebook"
               ><i class="fab fa-facebook-f"></i
             ></a>
@@ -234,8 +260,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-    <script src="nav.js"></script>
+    <script src="nav.js" defer></script>
 
     <script>
       document.querySelectorAll(".card button").forEach((button) => {
