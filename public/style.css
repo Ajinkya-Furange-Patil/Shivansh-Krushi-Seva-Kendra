@@ -1,64 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+/* 🌈 Root: Luxurious Theme Colors */
+:root {
+  --lux-bg: #f8f9f5;
+  --lux-dark-bg: #1c1f2b;
+  --lux-primary: #006d5b;
+  --lux-accent: #20c997;
+  --lux-highlight: #00e6e6;
+  --lux-muted: #e6f0ec;
+  --lux-white: #ffffff;
+  --lux-text: #333333;
+  --lux-footer-bg: #203a43;
+  --lux-card-border: #c8e6c9;
+  --lux-success: #388e3c;
+  --lux-light-success: #66bb6a;
+  --lux-hover-success: #2e7d32;
+  --lux-cream: #f4fdf1;
+}
+
+/* 🎯 Reset & Base Styles */
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #f4fdf1;
-  color: #333;
+  background-color: var(--lux-bg);
+  color: var(--lux-text);
+  line-height: 1.6;
 }
 
-/* Navbar */
+/* 🔝 Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
   background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
+  color: var(--lux-white);
   position: fixed;
   width: 100%;
   top: 0;
-  left: 0;
   z-index: 999;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
-
 .navbar .logo {
   font-size: 1.8rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--lux-white);
 }
-
 .navbar ul {
   display: flex;
   list-style: none;
 }
-
 .navbar ul li {
   margin-left: 30px;
 }
-
 .navbar ul li a {
   text-decoration: none;
-  color: #fff;
+  color: var(--lux-white);
   font-weight: 500;
   transition: color 0.3s ease;
 }
-
 .navbar ul li a:hover {
-  color: #00e6e6;
+  color: var(--lux-highlight);
 }
-
 .hamburger {
   display: none;
   font-size: 24px;
   cursor: pointer;
 }
 
-/* Info Row (Free shipping, etc.) */
+/* 🧾 Info Boxes */
 .info-row {
   display: flex;
   flex-wrap: wrap;
@@ -67,46 +81,37 @@ body {
   max-width: 1200px;
   margin: 75px auto -50px auto;
 }
-
 .info-box {
   flex: 1 1 30%;
-  background-color: #e8f5e9;
+  background-color: var(--lux-muted);
   margin: 10px;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
+  min-height: 120px;
 }
-
 .info-box:hover {
   transform: translateY(-5px);
 }
-
 .info-box i {
   font-size: 2rem;
-  color: #388e3c;
+  color: var(--lux-success);
   margin-bottom: 0.5rem;
   display: block;
 }
 
-.info-box p {
-  font-size: 1rem;
-  color: #333;
-  margin: 0;
-}
-
-/* Product Cards */
+/* 🛒 Product Cards */
 .row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin: 2rem 0;
 }
-
 .card {
-  background-color: #ffffff;
-  border: 1px solid #c8e6c9;
+  background-color: var(--lux-white);
+  border: 1px solid var(--lux-card-border);
   border-radius: 1rem;
   width: 14rem;
   margin: 1rem;
@@ -114,64 +119,46 @@ body {
   transition: transform 0.2s;
   position: relative;
   flex: 1 1 200px;
+  min-height: 400px;
 }
-
 .card:hover {
   transform: translateY(-5px);
 }
-
 .card img {
   width: 100%;
   height: 160px;
   object-fit: cover;
   border-radius: 1rem 1rem 0 0;
+  aspect-ratio: 1 / 1;
 }
-
 .card h3,
 .card p {
   text-align: center;
   margin: 0.5rem 0;
 }
-
-.card button {
-  background-color: #66bb6a;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.6rem;
-  cursor: pointer;
-  display: block;
-  margin: 1rem auto;
-  transition: background 0.3s ease;
-}
-
-main button {
-  background-color: #66bb6a;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.6rem;
-  cursor: pointer;
-  display: block;
-  margin: 1rem auto;
-  transition: background 0.3s ease;
-}
+.card button,
+main button,
 main button a {
-  text-decoration: none;
-  color: #ffffff;
-  background-color: #66bb6a;
+  background-color: var(--lux-light-success);
+  color: var(--lux-white);
   padding: 0.5rem 1rem;
-  border-radius: 5px;
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  display: block;
+  margin: 1rem auto;
   font-size: 17px;
   font-weight: 500;
-  display: inline-block;
+  text-decoration: none;
   transition: background 0.3s ease;
 }
-.card button:hover {
-  background-color: #2e7d32;
+.card button:hover,
+.shop-now:hover,
+.footer-newsletter button:hover {
+  background-color: var(--lux-hover-success);
 }
 
-/* Static Bottom Section */
+/* 🌄 Static Section */
 .static-bottom {
   background: url("../img/bg-satic-home3.jpg") center bottom no-repeat;
   background-size: cover;
@@ -182,11 +169,9 @@ main button a {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
-  width: 100%;
-  color: #fff;
+  color: var(--lux-white);
   position: relative;
 }
-
 .static-bottom::before {
   content: "";
   position: absolute;
@@ -197,82 +182,53 @@ main button a {
   background: rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
-
-/* Info Card Styles */
 .info-card {
   background: rgba(255, 255, 255, 0.95);
-  color: #333;
+  color: var(--lux-text);
   border-radius: 12px;
   padding: 20px;
   flex: 1 1 calc(33.333% - 20px);
   position: relative;
   z-index: 2;
-  transition: all 0.4s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
   text-align: left;
 }
-
-/* Unique Hover Outlines */
 .box1:hover {
   outline: 3px dashed #ff7043;
   outline-offset: -8px;
-  transform: translateY(-5px) scale(1.02);
 }
 .box2:hover {
   outline: 3px dotted #42a5f5;
   outline-offset: -8px;
-  transform: translateY(-5px) scale(1.02);
 }
 .box3:hover {
-  outline: 3px solid #66bb6a;
+  outline: 3px solid var(--lux-light-success);
   outline-offset: -8px;
-  transform: translateY(-5px) scale(1.02);
 }
-
-/* Inner Styles */
-.box-inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
 .text h3 {
-  color: #2e7d32;
+  color: var(--lux-hover-success);
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
 }
-
-.info-text {
-  color: #333;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
-  line-height: 1.5;
-}
-
 .shop-now {
   text-decoration: none;
-  color: #ffffff;
-  background-color: #66bb6a;
+  background-color: var(--lux-light-success);
   padding: 0.5rem 1rem;
   border-radius: 5px;
   font-weight: 500;
   display: inline-block;
+  color: var(--lux-white);
   transition: background 0.3s ease;
 }
 
-.shop-now:hover {
-  background-color: #388e3c;
-}
-
-/* Footer Style */
+/* 🔻 Footer */
 .site-footer {
-  background: #203a43;
-  color: #f4fdf1;
+  background: var(--lux-footer-bg);
+  color: var(--lux-cream);
   padding: 40px 20px 20px;
   font-size: 0.9rem;
-  /* margin-top: 60px; */
 }
-
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -281,206 +237,145 @@ main button a {
   gap: 30px;
   justify-content: space-between;
 }
-.footer-bottom p a{
-  color: #f4fdf1;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
 .footer-about,
 .footer-links,
 .footer-contact,
 .footer-newsletter {
   flex: 1 1 220px;
 }
-
 .footer-about h3,
 .footer-links h3,
 .footer-contact h3,
 .footer-newsletter h3 {
   margin-bottom: 15px;
   font-size: 1.2rem;
-  color: #66bb6a;
+  color: var(--lux-light-success);
 }
-
-.footer-about p,
-.footer-contact p {
-  line-height: 1.5;
-}
-
 .footer-links ul {
   list-style: none;
 }
-
 .footer-links ul li {
   margin-bottom: 10px;
 }
-
 .footer-links ul li a {
-  color: #f4fdf1;
+  color: var(--lux-cream);
   text-decoration: none;
   transition: color 0.3s ease;
 }
-
 .footer-links ul li a:hover {
-  color: #66bb6a;
+  color: var(--lux-light-success);
 }
-
+.footer-contact p a {
+  color: var(--lux-light-success);
+  text-decoration: none;
+}
 .footer-newsletter form {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
-
 .footer-newsletter input[type="email"] {
   flex: 1 1 70%;
   padding: 10px;
   border-radius: 5px;
-  border: none;
   font-size: 1rem;
+  border: none;
 }
-
 .footer-newsletter button {
   flex: 1 1 25%;
-  background-color: #66bb6a;
+  background-color: var(--lux-light-success);
   border: none;
-  color: white;
+  color: var(--lux-white);
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-
-.footer-newsletter button:hover {
-  background-color: #388e3c;
-}
-
-.social-icons {
-  margin-top: 15px;
-}
-
 .social-icons a {
-  color: #f4fdf1;
+  color: var(--lux-cream);
   margin-right: 15px;
   font-size: 1.2rem;
   transition: color 0.3s ease;
   text-decoration: none;
 }
-
 .social-icons a:hover {
-  color: #66bb6a;
+  color: var(--lux-light-success);
 }
-
 .footer-bottom {
   text-align: center;
   margin-top: 25px;
   font-size: 0.85rem;
   color: #a8d5a2;
 }
+.footer-bottom p a {
+  color: var(--lux-cream);
+  text-decoration: none;
+}
 
-/* FAQ Section Styling */
+/* ❓ FAQ Section */
 .faq-section {
   background-color: #f9f9f9;
   padding: 50px 20px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
+  color: var(--lux-text);
 }
-
 .faq-section .container {
   max-width: 900px;
   margin: 0 auto;
 }
-
 .faq-section h2 {
   text-align: center;
   font-size: 32px;
   margin-bottom: 20px;
-  color: #2e7d32;
+  color: var(--lux-hover-success);
 }
-
-.faq-section p {
-  font-size: 16px;
-  line-height: 1.6;
-}
-
 .faq-item {
-  background-color: #ffffff;
+  background-color: var(--lux-white);
   border-radius: 5px;
   padding: 20px;
   margin: 15px 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
 }
-
 .faq-item:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
-
 .faq-item h3 {
   font-size: 20px;
   margin-bottom: 10px;
   color: #1b5e20;
 }
-
 .faq-item a {
-  color: #388e3c;
+  color: var(--lux-success);
   text-decoration: underline;
 }
-
 .faq-contact {
   text-align: center;
   margin-top: 40px;
   padding: 20px;
-  background-color: #e8f5e9;
-  border: 1px solid #c8e6c9;
+  background-color: var(--lux-muted);
+  border: 1px solid var(--lux-card-border);
   border-radius: 5px;
 }
-
 .faq-contact h3 {
   font-size: 22px;
-  color: #2e7d32;
-  margin-bottom: 10px;
+  color: var(--lux-hover-success);
 }
-
 .faq-contact strong {
   color: #1b5e20;
 }
 
-/* Responsive */
-@media (max-width: 1000px) {
-  .faq-section {
-    margin-top: 40px;
-  }
-
-}
-
-/* Responsive Design */
+/* 📱 Responsive Design */
 @media (max-width: 768px) {
   .info-card,
-  .info-box {
+  .info-box,
+  .card,
+  .footer-newsletter input,
+  .footer-newsletter button {
     flex: 1 1 100%;
-    max-width: 100%;
   }
-
   .static-bottom {
     flex-direction: column;
     align-items: center;
   }
-
-  .info-row {
-    margin-top: 100px;
-    margin-bottom: -50px;
-  }
-
-  .row {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .card {
-    width: 45%;
-    margin: 1rem;
-  }
-
   .navbar ul {
     position: fixed;
     top: 0;
@@ -494,57 +389,115 @@ main button a {
     transition: right 0.4s ease-in-out;
     z-index: 998;
   }
-
   .navbar ul.open {
     right: 0;
   }
-
   .navbar ul li {
     margin: 20px 0;
   }
-
   .hamburger {
     display: block;
     font-size: 1.8rem;
     z-index: 999;
     cursor: pointer;
   }
-
   body.nav-open {
     overflow: hidden;
   }
   .footer-container {
     flex-direction: column;
-    /* gap: 40px; */
-  }
-
-  .footer-newsletter form {
-    flex-direction: column;
-  }
-  .footer-about,
-  .footer-links,
-  .footer-contact,
-  .footer-newsletter {
-    margin-bottom: -1rem;
-  }
-  .footer-newsletter input[type="email"],
-  .footer-newsletter button {
-    flex: 1 1 100%;
-  }
-  #subscribe{
-    display: block;
-    padding: 10px 10px;
   }
   .faq-section {
     padding: 30px 10px;
     margin-top: 20px;
   }
-
+  .faq-section h2 {
+    font-size: 26px;
+  }
   .faq-item h3 {
     font-size: 18px;
   }
+}
+/* 📐 Tablet Responsive: 768px - 1024px */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Navbar adjusts for tablets */
+  .navbar {
+    padding: 10px 20px;
+  }
+  .navbar .logo {
+    font-size: 1.5rem;
+  }
+  .navbar ul li {
+    margin-left: 20px;
+  }
 
+  /* Info boxes stack better on tablet */
+  .info-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .info-box {
+    flex: 1 1 45%;
+    margin: 10px;
+    min-height: 100px;
+  }
+
+  /* Product card spacing and layout */
+  .card {
+    width: 18rem;
+    margin: 1rem;
+    min-height: 420px;
+  }
+
+  /* Static section layout for mid-size screens */
+  .static-bottom {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 40px 15px;
+    margin-top: 60px;
+  }
+  .info-card {
+    flex: 1 1 45%;
+    margin: 10px;
+    padding: 20px;
+  }
+
+  /* Footer tweaks for tablet */
+  .footer-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .footer-about,
+  .footer-links,
+  .footer-contact,
+  .footer-newsletter {
+    flex: 1 1 45%;
+    margin-bottom: 20px;
+  }
+
+  /* FAQ section scaling */
+  .faq-section {
+    padding: 40px 20px;
+  }
   .faq-section h2 {
-    font-size: 26px;
+    font-size: 28px;
+  }
+  .faq-item h3 {
+    font-size: 20px;
+  }
+
+  /* Newsletter input buttons */
+  .footer-newsletter form {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  .footer-newsletter input[type="email"] {
+    flex: 2;
+  }
+  .footer-newsletter button {
+    flex: 1;
   }
 }
