@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Krushi Seva Kendra</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+        <nav>
+          <!-- <ul>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">Orders</a></li>
+            <li><a href="#">Notifications</a></li>
+          </ul> -->
+        </nav>
+        <div
+          style="color: #fff; margin-left: auto; margin-right: 1rem"
+          id="adminInfo"
+        ></div>
+        <button id="logoutBtn" class="lux-button">🚪 Logout</button>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <div class="container">
+      <div>
+        <!-- Sidebar -->
+        <aside class="lux-card p-4 rounded shadow-md">
+          <h2>Admin Actions</h2>
+          <ul class="ul">
+            <li>
+              <button id="addProductBtn" class="lux-button">Add Product</button>
+            </li>
+            <li>
+              <button id="viewAllProducts" class="lux-button">
+                View All Product
+              </button>
+            </li>
+
+            <li>
+              <button id="viewOrdersBtn" class="lux-button">View Orders</button>
+            </li>
+            <li>
+              <button id="viewNotificationsBtn" class="lux-button">
+                View Notifications
+              </button>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Main Panel -->
+        <main class="col-span-3">
+          <div class="grid grid-cols-1 gap-4">
+            <section
+              id="addProductSection"
+              class="lux-card p-4 rounded shadow-md"
+              style="display: none"
+            >
+              <h2>Add Product</h2>
+              <form id="addProductForm">
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Product Name"
+                  required
+                />
+                <input
+                  type="text"
+                  name="image_url"
+                  placeholder="Image URL"
+                  required
+                />
+                <textarea
+                  name="description"
+                  placeholder="Description"
+                  required
+                ></textarea>
+                <input
+                  type="number"
+                  name="price"
+                  placeholder="Price"
+                  required
+                />
+                <input
+                  type="number"
+                  name="quantity"
+                  placeholder="Quantity"
+                  required
+                />
+                <button type="submit" class="lux-button">Save Product</button>
+              </form>
+            </section>
+            <!-- Add this section to your admin.html file -->
+            <section
+              id="editProductSection"
+              class="lux-card p-4 rounded shadow-md"
+              style="display: none"
+            >
+              <h3>🛒 Edit Product</h3>
+              <form id="editProductForm">
+                <!-- <label for="add-title">Product Title:</label> -->
+                <input
+                  type="text"
+                  id="add-title"
+                  name="title"
+                  required
+                  placeholder="Product Name"
+                />
+                <!-- <label for="add-image">Image URL:</label> -->
+                <input
+                  type="text"
+                  id="add-image"
+                  name="image_url"
+                  required
+                  placeholder="Image URL"
+                />
+                <!-- <label for="add-description">Description:</label> -->
+                <textarea
+                  id="add-description"
+                  name="description"
+                  required
+                  placeholder="Description"
+                ></textarea>
+                <!-- <label for="add-price">Price (₹):</label> -->
+                <input
+                  type="number"
+                  id="add-price"
+                  name="price"
+                  placeholder="Price"
+                  step="0.01"
+                  min="0"
+                  placeholder="Price"
+                  required
+                />
+
+                <!-- <label for="add-quantity">Quantity:</label> -->
+                <input
+                  type="number"
+                  id="add-quantity"
+                  name="quantity"
+                  placeholder="Quantity"
+                  min="0"
+                  required
+                  style="
+                    width: 100%;
+                    padding: 8px;
+                    margin-top: 5px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                  "
+                />
+
+                <button type="submit" class="lux-button">Save Product</button>
+
+                <button type="button" class="lux-button">Cancel</button>
+              </form>
+            </section>
+            <!-- Ordered Section -->
+            <section
+              id="ordersSection"
+              class="lux-card p-4 rounded shadow-md"
+              style="display: none"
+            >
+              <h2>Customer Orders</h2>
+              <div id="ordersList" class="overflow-x-auto">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Email</th>
+                      <th>Phone Number</th>
+                      <th>Address</th>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Total</th>
+                      <th>Ordered On</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ordersTableBody">
+                    <!-- Orders will be injected here -->
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section
+              id="viewAllProductsSection"
+              class="lux-card p-4 rounded shadow-md"
+              style="display: none"
+            >
+              <h2 class="text-xl font-bold mb-2">All Products</h2>
+              <div class="overflow-x-auto">
+                <table class="text-sm">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Image</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Delete</th>
+                      <th>Edit</th>
+                    </tr>
+                  </thead>
+                  <tbody id="allProductsTableBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section
+              id="notificationsSection"
+              class="lux-card p-4 rounded shadow-md"
+              style="display: none"
+            >
+              <h2>Notifications</h2>
+              <ul id="notificationList"></ul>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="admin.js" defer></script>
+  </body>
+</html>
