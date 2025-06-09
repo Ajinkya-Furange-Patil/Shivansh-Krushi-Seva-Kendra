@@ -143,6 +143,7 @@ app.post("/login", async (req, res) => {
       success: true,
       username: user.full_name,
       role: user.role,
+      email: user.email, // <-- Add this line
     });
   } catch (err) {
     console.error("❌ Login error:", err);
@@ -208,136 +209,475 @@ function successMessage() {
       </a>
     </div>
   `;
-}
+} // ✅ FIXED: Function to extract and save order items from HTML
 
-// app.post("/send-order", async (req, res) => {
-//   const { name, phone, email, address, orderHTML } = req.body;
-
-//   if (!name || !phone || !email || !address) {
-//     return res.status(400).send("Missing fields.");
-//   }
-
-//   // 1️⃣ Extract quantity and total amount
-//   const totalRegex = /<strong>₹(\d+)<\/strong>/;
-//   const match = orderHTML.match(totalRegex);
-//   const total_amount = match ? parseFloat(match[1]) : 0;
-
-//   const quantityRegex = /<td>(\d+)<\/td>/g;
-//   const quantities = [...orderHTML.matchAll(quantityRegex)].map((q) =>
-//     parseInt(q[1])
-//   );
-//   const total_quantity = quantities.slice(0, -1).reduce((sum, q) => sum + q, 0);
-
-//   // 2️⃣ Save to MySQL
-//   try {
-//     const [result] = await db.execute(
-//       "INSERT INTO orders (user_id, total_amount, total_quantity, phone, address, status) VALUES (?, ?, ?, ?, ?, ?)",
-//       [null, total_amount, total_quantity, phone, address, "pending"]
-//     );
-
-//     console.log("✅ Order stored in DB with ID:", result.insertId);
-
-//     // 3️⃣ Send Emails
-//     const transporter = nodemailer.createTransport({
-//       service: "gmail",
-//       auth: { user: GMAIL_USER, pass: GMAIL_PASS },
-//     });
-
-//     // HTML email to send to you (admin)
-//     const adminHtmlBody = `
-//     <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #f4fdf1; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #d0e6d1;">
-//       <h2 style="color: #2e7d32; border-bottom: 2px solid #66bb6a; padding-bottom: 10px; margin-bottom: 20px;">🛒 New Order Received</h2>
-//       <div style="margin-bottom: 25px;">
-//         <h3 style="color: #388e3c; font-size: 20px;">👤 Customer Details</h3>
-//         <p><strong>Name:</strong> ${escapeHTML(name)}</p>
-//         <p><strong>Phone:</strong> ${escapeHTML(phone)}</p>
-//         <p><strong>Email:</strong> <a href="mailto:${escapeHTML(
-//           email
-//         )}" style="color: #2e7d32;">${escapeHTML(email)}</a></p>
-//         <p><strong>Address:</strong><br>${escapeHTML(address).replace(
-//           /\n/g,
-//           "<br>"
-//         )}</p>
-//       </div>
-//       <div>
-//         <h3 style="color: #388e3c; font-size: 20px; margin-bottom: 10px;">📦 Order Summary</h3>
-//         ${orderHTML || "<p>No cart items found.</p>"}
-//       </div>
-//       <div style="margin-top: 30px; text-align: center;">
-//         <p style="font-size: 14px; color: #777;">This order was submitted from your website. Please process it accordingly.</p>
-//       </div>
-//     </div>
-//   `;
-
-//     // HTML email to send to user
-//     const userHtmlBody = `
-//     <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #e8f5e9; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #c8e6c9;">
-//       <h2 style="color: #2e7d32;">🎉 Thank You for Your Order, ${escapeHTML(
-//         name
-//       )}!</h2>
-//       <p>We're happy to confirm your order. Here's a quick summary:</p>
-//       <h3 style="color: #388e3c;">📦 Order Summary</h3>
-//       ${orderHTML || "<p>No cart items found.</p>"}
-//       <p style="margin-top: 20px;">We'll reach out to you shortly at <strong>${escapeHTML(
-//         phone
-//       )}</strong> or <a href="mailto:${escapeHTML(email)}">${escapeHTML(
-//       email
-//     )}</a></p>
-//       <p style="margin-top: 20px; font-size: 13px; color: #666;">If you have any questions, reply to this email.</p>
-//     </div>
-//   `;
-//     const mailToAdmin = {
-//       from: `"Order Bot" <${GMAIL_USER}>`,
-//       to: `${GMAIL_USER}, ${ADMIN_EMAIL_2}`,
-//       subject: "New Order Received",
-//       html: adminHtmlBody,
-//     };
-
-//     const mailToUser = {
-//       from: `"Shivansh Krushi Seva Kendra" <${GMAIL_USER}>`,
-//       to: email,
-//       subject: "🛍️ Order Confirmation",
-//       html: userHtmlBody,
-//     };
-
-//     await Promise.all([
-//       transporter.sendMail(mailToAdmin),
-//       transporter.sendMail(mailToUser),
-//     ]);
-
-//     console.log("📨 Emails sent successfully!");
-
-//     // res.redirect("/thank-you.html");
-//     res.send(successMessage());
-//   } catch (err) {
-//     console.error("❌ Error processing order:", err);
-//     res.status(500).send("Error processing order.");
-//   }
-// });
-
-// ✅ SOLUTION 1: Get user_id from email and insert proper order
-app.post("/send-order", async (req, res) => {
-  const { name, phone, email, address, orderHTML } = req.body;
-
-  if (!name || !phone || !email || !address) {
-    return res.status(400).send("Missing fields.");
-  }
-
-  // 1️⃣ Extract quantity and total amount
-  const totalRegex = /<strong>₹(\d+)<\/strong>/;
-  const match = orderHTML.match(totalRegex);
-  const total_amount = match ? parseFloat(match[1]) : 0;
-
-  const quantityRegex = /<td>(\d+)<\/td>/g;
-  const quantities = [...orderHTML.matchAll(quantityRegex)].map((q) =>
-    parseInt(q[1])
-  );
-  const total_quantity = quantities.slice(0, -1).reduce((sum, q) => sum + q, 0);
-
-  // 2️⃣ Save to MySQL
+async function saveOrderItems(connection, orderId, orderHTML) {
   try {
-    // First, get the user_id from the email
-    const [userRows] = await db.execute(
+    console.log("🔍 Extracting order items from HTML for order:", orderId);
+
+    // Updated regex to match the cart HTML structure
+    const itemRegex =
+      /<tr>\s*<td>([^<]+)<\/td>\s*<td>(\d+)<\/td>\s*<td>₹(\d+)<\/td>\s*<\/tr>/g;
+    let match;
+    const items = [];
+
+    while ((match = itemRegex.exec(orderHTML)) !== null) {
+      const productName = match[1].trim();
+      const quantity = parseInt(match[2]);
+      const price = parseInt(match[3]);
+
+      items.push({
+        name: productName,
+        quantity: quantity,
+        price: price,
+      });
+    }
+
+    console.log("📦 Extracted items:", items);
+
+    // Save each item
+    for (const item of items) {
+      // Find product by name
+      const [productRows] = await connection.execute(
+        "SELECT id, price FROM products WHERE title LIKE ?",
+        [`%${item.name}%`]
+      );
+
+      if (productRows.length > 0) {
+        const product_id = productRows[0].id;
+        const actual_price = productRows[0].price;
+
+        // Insert into order_items
+        await connection.execute(
+          "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+          [orderId, product_id, item.quantity, actual_price]
+        );
+
+        console.log(`✅ Saved order item: ${item.name} x${item.quantity}`);
+
+        // Update product stock
+        await connection.execute(
+          "UPDATE products SET quantity = quantity - ? WHERE id = ?",
+          [item.quantity, product_id]
+        );
+
+        console.log(`✅ Updated stock for product ID ${product_id}`);
+      } else {
+        console.log(`⚠️ Product not found in database: "${item.name}"`);
+      }
+    }
+  } catch (error) {
+    console.error("❌ Error saving order items:", error);
+    throw error;
+  }
+}
+app.get("/api/orders", async (req, res) => {
+  try {
+    console.log("🔥 GET /api/orders hit");
+
+    const [rows] = await db.query(`
+      SELECT 
+        o.id AS order_id,
+        u.full_name AS customer_name,
+        u.email AS customer_email,
+        o.phone AS customer_phone,
+        o.address AS customer_address,
+        o.total_amount,
+        o.total_quantity,
+        o.status,
+        o.created_at,
+        COALESCE(
+          GROUP_CONCAT(
+            DISTINCT CONCAT(p.title, ' (Qty: ', oi.quantity, ', Price: ₹', oi.price, ')')
+            ORDER BY p.title 
+            SEPARATOR ', '
+          ),
+          'No items found'
+        ) AS product_details
+      FROM orders o
+      LEFT JOIN users u ON o.user_id = u.id
+      LEFT JOIN order_items oi ON o.id = oi.order_id
+      LEFT JOIN products p ON oi.product_id = p.id
+      GROUP BY 
+        o.id, u.full_name, u.email, o.phone, o.address, 
+        o.total_amount, o.total_quantity, o.status, o.created_at
+      ORDER BY o.created_at DESC
+    `);
+
+    console.log("🔍 Orders fetched:", rows.length);
+
+    // Add a check to see if any orders have empty product_details
+    const ordersWithoutItems = rows.filter(
+      (order) => order.product_details === "No items found"
+    );
+    if (ordersWithoutItems.length > 0) {
+      console.log(
+        "⚠️ Found orders without items:",
+        ordersWithoutItems.map((o) => o.order_id)
+      );
+    }
+
+    res.json(rows);
+  } catch (err) {
+    console.error("❌ Error fetching orders:", err.message);
+    res.status(500).json({ message: "Database error", error: err.message });
+  }
+});
+
+// ✅ GET single order details (your existing code)
+app.get("/api/orders/:id", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    const [orderRows] = await db.query(
+      `
+      SELECT 
+        o.*,
+        u.full_name AS customer_name,
+        u.email AS customer_email
+      FROM orders o
+      LEFT JOIN users u ON o.user_id = u.id
+      WHERE o.id = ?
+    `,
+      [orderId]
+    );
+
+    if (orderRows.length === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const [itemRows] = await db.query(
+      `
+      SELECT 
+        oi.*,
+        p.title AS product_title,
+        p.image_url AS product_image
+      FROM order_items oi
+      LEFT JOIN products p ON oi.product_id = p.id
+      WHERE oi.order_id = ?
+    `,
+      [orderId]
+    );
+
+    const order = {
+      ...orderRows[0],
+      items: itemRows,
+    };
+
+    res.json(order);
+  } catch (err) {
+    console.error("❌ Error fetching order details:", err.message);
+    res.status(500).json({ message: "Database error", error: err.message });
+  }
+});
+
+// ✅ NEW: Update order status endpoint (MISSING FROM YOUR CODE)
+app.put("/api/orders/:id/status", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    const { status } = req.body;
+
+    // Validate status
+    const validStatuses = [
+      "pending",
+      "confirmed",
+      "processing",
+      "shipped",
+      "delivered",
+      "cancelled",
+    ];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status. Must be one of: " + validStatuses.join(", "),
+      });
+    }
+
+    console.log(`🔄 Updating order ${orderId} status to: ${status}`);
+
+    const [result] = await db.execute(
+      "UPDATE orders SET status = ? WHERE id = ?",
+      [status, orderId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    console.log(`✅ Order ${orderId} status updated to: ${status}`);
+
+    res.json({
+      message: "Order status updated successfully",
+      order_id: orderId,
+      new_status: status,
+    });
+  } catch (err) {
+    console.error("❌ Error updating order status:", err.message);
+    res.status(500).json({ message: "Database error", error: err.message });
+  }
+});
+// In your server3.js
+app.put("/api/products/:id", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { title, description, price, quantity, image_url } = req.body;
+
+    // Validation
+    if (!title && !description && !price && !quantity && !image_url) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one field to update is required",
+      });
+    }
+
+    // Build dynamic update query
+    let updateFields = [];
+    let values = [];
+
+    if (title) {
+      updateFields.push("title = ?");
+      values.push(title);
+    }
+    if (description) {
+      updateFields.push("description = ?");
+      values.push(description);
+    }
+    if (price) {
+      if (isNaN(price) || price < 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Price must be a valid positive number",
+        });
+      }
+      updateFields.push("price = ?");
+      values.push(price);
+    }
+    if (quantity) {
+      if (!Number.isInteger(Number(quantity)) || quantity < 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Quantity must be a valid positive integer",
+        });
+      }
+      updateFields.push("quantity = ?");
+      values.push(quantity);
+    }
+    if (image_url) {
+      updateFields.push("image_url = ?");
+      values.push(image_url);
+    }
+
+    // Add product ID to values array
+    values.push(productId);
+
+    const query = `
+      UPDATE products 
+      SET ${updateFields.join(", ")},
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `;
+
+    console.log("🔄 Updating product:", productId);
+    console.log("📝 Update query:", query);
+    console.log("📦 Values:", values);
+
+    const [result] = await db.execute(query, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // Fetch updated product
+    const [updatedProduct] = await db.execute(
+      "SELECT * FROM products WHERE id = ?",
+      [productId]
+    );
+
+    console.log("✅ Product updated successfully");
+
+    res.json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct[0],
+    });
+  } catch (err) {
+    console.error("❌ Error updating product:", err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
+// ✅ FIXED: Create order via API (your existing code - no changes needed)
+app.post("/api/orders", async (req, res) => {
+  const connection = await db.getConnection();
+
+  try {
+    console.log("🔥 POST /api/orders hit");
+    console.log("📦 Request body:", req.body);
+
+    const { user_id, phone, address, items } = req.body;
+
+    // Validate required fields
+    if (
+      !user_id ||
+      !phone ||
+      !address ||
+      !items ||
+      !Array.isArray(items) ||
+      items.length === 0
+    ) {
+      return res.status(400).json({
+        message:
+          "Missing required fields: user_id, phone, address, and items array",
+      });
+    }
+
+    await connection.beginTransaction();
+
+    // Calculate totals
+    let total_amount = 0;
+    let total_quantity = 0;
+
+    // Validate products and calculate totals
+    for (const item of items) {
+      if (!item.product_id || !item.quantity || item.quantity <= 0) {
+        await connection.rollback();
+        return res.status(400).json({
+          message: "Each item must have valid product_id and quantity",
+        });
+      }
+
+      // Get product details and validate stock
+      const [productRows] = await connection.query(
+        "SELECT id, title, price, quantity FROM products WHERE id = ?",
+        [item.product_id]
+      );
+
+      if (productRows.length === 0) {
+        await connection.rollback();
+        return res.status(404).json({
+          message: `Product with ID ${item.product_id} not found`,
+        });
+      }
+
+      const product = productRows[0];
+
+      // Check stock availability
+      if (product.quantity < item.quantity) {
+        await connection.rollback();
+        return res.status(400).json({
+          message: `Insufficient stock for ${product.title}. Available: ${product.quantity}, Requested: ${item.quantity}`,
+        });
+      }
+
+      total_amount += product.price * item.quantity;
+      total_quantity += item.quantity;
+    }
+
+    // Create the order
+    const [orderResult] = await connection.query(
+      `
+      INSERT INTO orders (user_id, phone, address, total_quantity, total_amount, status) 
+      VALUES (?, ?, ?, ?, ?, 'pending')
+    `,
+      [user_id, phone, address, total_quantity, total_amount]
+    );
+
+    const order_id = orderResult.insertId;
+    console.log("✅ Order created with ID:", order_id);
+
+    // Insert order items and update product quantities
+    for (const item of items) {
+      // Get current product price
+      const [productRows] = await connection.query(
+        "SELECT price FROM products WHERE id = ?",
+        [item.product_id]
+      );
+      const product_price = productRows[0].price;
+
+      // Insert order item
+      await connection.query(
+        `
+        INSERT INTO order_items (order_id, product_id, quantity, price) 
+        VALUES (?, ?, ?, ?)
+      `,
+        [order_id, item.product_id, item.quantity, product_price]
+      );
+
+      // Update product quantity (reduce stock)
+      await connection.query(
+        `
+        UPDATE products 
+        SET quantity = quantity - ? 
+        WHERE id = ?
+      `,
+        [item.quantity, item.product_id]
+      );
+
+      console.log(
+        `✅ Added item: Product ${item.product_id}, Qty: ${item.quantity}`
+      );
+    }
+
+    // Create notification for admin (assuming admin_id = 1)
+    const notification_message = `New order #${order_id} placed by user ${user_id}`;
+    await connection.query(
+      `
+      INSERT INTO notifications (admin_id, order_id, message) 
+      VALUES (1, ?, ?)
+    `,
+      [order_id, notification_message]
+    );
+
+    await connection.commit();
+    res.send(successMessage());
+    console.log("🎉 Order transaction completed successfully");
+  } catch (err) {
+    await connection.rollback();
+    console.error("❌ Error creating order:", err.message);
+    res.status(500).json({
+      message: "Failed to create order",
+      error: err.message,
+    });
+  } finally {
+    connection.release();
+  }
+});
+
+app.post("/send-order", async (req, res) => {
+  const connection = await db.getConnection();
+
+  try {
+    const { name, phone, email, address, orderHTML } = req.body;
+
+    if (!name || !phone || !email || !address) {
+      return res.status(400).json({
+        message: "Missing required fields: name, phone, email, address",
+      });
+    }
+
+    console.log("🔥 Processing order from website form");
+
+    await connection.beginTransaction();
+
+    // 1️⃣ Extract quantity and total amount
+    const totalRegex = /<strong>₹(\d+)<\/strong>/;
+    const match = orderHTML.match(totalRegex);
+    const total_amount = match ? parseFloat(match[1]) : 0;
+
+    const quantityRegex = /<td>(\d+)<\/td>/g;
+    const quantities = [...orderHTML.matchAll(quantityRegex)].map((q) =>
+      parseInt(q[1])
+    );
+    const total_quantity = quantities
+      .slice(0, -1)
+      .reduce((sum, q) => sum + q, 0);
+
+    // 2️⃣ Get or create user
+    const [userRows] = await connection.execute(
       "SELECT id FROM users WHERE email = ?",
       [email]
     );
@@ -345,11 +685,10 @@ app.post("/send-order", async (req, res) => {
     let user_id = null;
     if (userRows.length > 0) {
       user_id = userRows[0].id;
-      console.log("✅ Found user ID:", user_id);
+      console.log("✅ Found existing user ID:", user_id);
     } else {
-      // If user doesn't exist, create a new user record
       console.log("⚠️ User not found, creating new user...");
-      const [newUserResult] = await db.execute(
+      const [newUserResult] = await connection.execute(
         "INSERT INTO users (full_name, email, phone, address, role, password) VALUES (?, ?, ?, ?, ?, ?)",
         [name, email, phone, address, "customer", "temp_password_" + Date.now()]
       );
@@ -357,155 +696,162 @@ app.post("/send-order", async (req, res) => {
       console.log("✅ Created new user with ID:", user_id);
     }
 
-    // Now insert the order with proper user_id
-    const [result] = await db.execute(
+    // 3️⃣ Create the order
+    const [orderResult] = await connection.execute(
       "INSERT INTO orders (user_id, total_amount, total_quantity, phone, address, status) VALUES (?, ?, ?, ?, ?, ?)",
       [user_id, total_amount, total_quantity, phone, address, "pending"]
     );
 
-    console.log("✅ Order stored in DB with ID:", result.insertId);
+    const order_id = orderResult.insertId;
+    console.log("✅ Order created with ID:", order_id);
 
-    // 3️⃣ Extract and save order items from orderHTML
-    await saveOrderItems(result.insertId, orderHTML);
+    // 4️⃣ Extract and save order items from HTML
+    await saveOrderItems(connection, order_id, orderHTML);
 
-    // 4️⃣ Send Emails (same as before)
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: GMAIL_USER, pass: GMAIL_PASS },
+    // 5️⃣ Create notification
+    const notification_message = `New order #${order_id} placed by ${name}`;
+    await connection.query(
+      "INSERT INTO notifications (admin_id, order_id, message) VALUES (1, ?, ?)",
+      [order_id, notification_message]
+    );
+
+    await connection.commit();
+
+    // 6️⃣ Send Emails
+    try {
+      await sendOrderEmails(order_id, name, phone, email, address, orderHTML);
+      console.log("📨 Emails sent successfully!");
+    } catch (emailErr) {
+      console.error("📧 Email sending failed:", emailErr);
+      // Still proceed, email error shouldn't rollback order creation
+    }
+
+    // res.status(200).json({
+    //   message: "Order placed successfully!",
+    //   order_id,
+    // });
+    res.send(successMessage());
+  } catch (err) {
+    await connection.rollback();
+    console.error("❌ Error processing order:", err);
+    res.status(500).json({
+      message: "Failed to create order",
+      error: err.message,
     });
+  } finally {
+    connection.release();
+  }
+});
 
-    // HTML email to send to you (admin)
-    const adminHtmlBody = `
+async function saveOrderItems(connection, orderId, orderHTML) {
+  try {
+    console.log("🔍 Extracting order items from HTML for order:", orderId);
+
+    const itemRegex =
+      /<tr[^>]*>\s*<td[^>]*>([^<]+)<\/td>\s*<td[^>]*>(\d+)<\/td>\s*<td[^>]*>₹(\d+(?:\.\d{2})?)<\/td>\s*<\/tr>/g;
+
+    let match;
+    const items = [];
+
+    while ((match = itemRegex.exec(orderHTML)) !== null) {
+      const productName = match[1].trim();
+      const quantity = parseInt(match[2]);
+      const price = parseFloat(match[3]);
+      items.push({
+        name: productName,
+        quantity: quantity,
+        price: price,
+      });
+    }
+
+    console.log("📦 Extracted items:", items);
+
+    for (const item of items) {
+      const [productRows] = await connection.execute(
+        "SELECT id, price FROM products WHERE title LIKE ?",
+        [`%${item.name}%`]
+      );
+
+      if (productRows.length > 0) {
+        const product_id = productRows[0].id;
+        const actual_price = productRows[0].price;
+
+        await connection.execute(
+          "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+          [orderId, product_id, item.quantity, actual_price]
+        );
+
+        await connection.execute(
+          "UPDATE products SET quantity = quantity - ? WHERE id = ?",
+          [item.quantity, product_id]
+        );
+
+        console.log(`✅ Saved order item: ${item.name} x${item.quantity}`);
+      } else {
+        console.log(`⚠️ Product not found in database: "${item.name}"`);
+      }
+    }
+  } catch (error) {
+    console.error("❌ Error saving order items:", error);
+    throw error;
+  }
+}
+// ✅ Helper function to send order emails
+async function sendOrderEmails(
+  orderId,
+  name,
+  phone,
+  email,
+  address,
+  orderHTML
+) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASS },
+  });
+
+  const adminHtmlBody = `
     <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #f4fdf1; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #d0e6d1;">
       <h2 style="color: #2e7d32; border-bottom: 2px solid #66bb6a; padding-bottom: 10px; margin-bottom: 20px;">🛒 New Order Received</h2>
       <div style="margin-bottom: 25px;">
         <h3 style="color: #388e3c; font-size: 20px;">👤 Customer Details</h3>
-        <p><strong>Order ID:</strong> #${result.insertId}</p>
-        <p><strong>Name:</strong> ${escapeHTML(name)}</p>
-        <p><strong>Phone:</strong> ${escapeHTML(phone)}</p>
-        <p><strong>Email:</strong> <a href="mailto:${escapeHTML(
-          email
-        )}" style="color: #2e7d32;">${escapeHTML(email)}</a></p>
-        <p><strong>Address:</strong><br>${escapeHTML(address).replace(
-          /\n/g,
-          "<br>"
-        )}</p>
+        <p><strong>Order ID:</strong> #${orderId}</p>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #2e7d32;">${email}</a></p>
+        <p><strong>Address:</strong><br>${address.replace(/\n/g, "<br>")}</p>
       </div>
       <div>
         <h3 style="color: #388e3c; font-size: 20px; margin-bottom: 10px;">📦 Order Summary</h3>
         ${orderHTML || "<p>No cart items found.</p>"}
       </div>
-      <div style="margin-top: 30px; text-align: center;">
-        <p style="font-size: 14px; color: #777;">This order was submitted from your website. Please process it accordingly.</p>
-      </div>
     </div>
   `;
 
-    // HTML email to send to user
-    const userHtmlBody = `
+  const userHtmlBody = `
     <div style="font-family: 'Segoe UI', 'Poppins', sans-serif; color: #333; background-color: #e8f5e9; padding: 30px; max-width: 700px; margin: auto; border-radius: 10px; border: 1px solid #c8e6c9;">
-      <h2 style="color: #2e7d32;">🎉 Thank You for Your Order, ${escapeHTML(
-        name
-      )}!</h2>
-      <p>We're happy to confirm your order <strong>#${
-        result.insertId
-      }</strong>. Here's a quick summary:</p>
+      <h2 style="color: #2e7d32;">🎉 Thank You for Your Order, ${name}!</h2>
+      <p>We're happy to confirm your order <strong>#${orderId}</strong>. Here's a quick summary:</p>
       <h3 style="color: #388e3c;">📦 Order Summary</h3>
       ${orderHTML || "<p>No cart items found.</p>"}
-      <p style="margin-top: 20px;">We'll reach out to you shortly at <strong>${escapeHTML(
-        phone
-      )}</strong> or <a href="mailto:${escapeHTML(email)}">${escapeHTML(
-      email
-    )}</a></p>
-      <p style="margin-top: 20px; font-size: 13px; color: #666;">If you have any questions, reply to this email.</p>
+      <p style="margin-top: 20px;">We'll reach out to you shortly at <strong>${phone}</strong> or <a href="mailto:${email}">${email}</a></p>
     </div>
   `;
 
-    const mailToAdmin = {
-      from: `"Order Bot" <${GMAIL_USER}>`,
-      to: `${GMAIL_USER}, ${ADMIN_EMAIL_2}`,
-      subject: `New Order #${result.insertId} Received`,
+  await Promise.all([
+    transporter.sendMail({
+      from: `"Order Bot" <${process.env.GMAIL_USER}>`,
+      to: `${process.env.GMAIL_USER}, ${process.env.ADMIN_EMAIL_2}`,
+      subject: `New Order #${orderId} Received`,
       html: adminHtmlBody,
-    };
-
-    const mailToUser = {
-      from: `"Shivansh Krushi Seva Kendra" <${GMAIL_USER}>`,
+    }),
+    transporter.sendMail({
+      from: `"Shivansh Krushi Seva Kendra" <${process.env.GMAIL_USER}>`,
       to: email,
-      subject: `🛍️ Order Confirmation #${result.insertId}`,
+      subject: `🛍️ Order Confirmation #${orderId}`,
       html: userHtmlBody,
-    };
-
-    await Promise.all([
-      transporter.sendMail(mailToAdmin),
-      transporter.sendMail(mailToUser),
-    ]);
-
-    console.log("📨 Emails sent successfully!");
-
-    res.send(successMessage());
-  } catch (err) {
-    console.error("❌ Error processing order:", err);
-    res.status(500).send("Error processing order: " + err.message);
-  }
-});
-
-// ✅ Helper function to save order items
-async function saveOrderItems(orderId, orderHTML) {
-  try {
-    // Extract product info from orderHTML
-    // This regex looks for table rows with product data
-    const productRowRegex =
-      /<tr[^>]*>.*?<td[^>]*>([^<]+)<\/td>.*?<td[^>]*>₹([0-9.]+)<\/td>.*?<td[^>]*>([0-9]+)<\/td>.*?<\/tr>/g;
-
-    let match;
-    const orderItems = [];
-
-    while ((match = productRowRegex.exec(orderHTML)) !== null) {
-      const productTitle = match[1].trim();
-      const price = parseFloat(match[2]);
-      const quantity = parseInt(match[3]);
-
-      // Skip if this is the total row or invalid data
-      if (
-        productTitle.toLowerCase().includes("total") ||
-        !productTitle ||
-        isNaN(price) ||
-        isNaN(quantity)
-      ) {
-        continue;
-      }
-
-      // Find product ID by title
-      const [productRows] = await db.execute(
-        "SELECT id FROM products WHERE title LIKE ?",
-        [`%${productTitle}%`]
-      );
-
-      if (productRows.length > 0) {
-        orderItems.push({
-          order_id: orderId,
-          product_id: productRows[0].id,
-          quantity: quantity,
-          price: price,
-        });
-      }
-    }
-
-    // Insert all order items
-    for (const item of orderItems) {
-      await db.execute(
-        "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
-        [item.order_id, item.product_id, item.quantity, item.price]
-      );
-    }
-
-    console.log(
-      `✅ Saved ${orderItems.length} order items for order ${orderId}`
-    );
-  } catch (err) {
-    console.error("❌ Error saving order items:", err);
-    // Don't throw error here as the main order is already saved
-  }
+    }),
+  ]);
 }
 app.get("/api/products", async (req, res) => {
   try {
@@ -560,184 +906,55 @@ app.post("/update-address", async (req, res) => {
     console.error("❌ Error updating address:", err);
     res.status(500).json({ message: "Internal server error" });
   }
-}); // Add this route to your server
+});
+// Example user-orders endpoint
 app.get("/user-orders", async (req, res) => {
-  try {
-    const { email } = req.query;
+  const email = req.query.email;
+  if (!email) {
+    return res.json({ success: false, message: "Email is required" });
+  }
 
-    if (!email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email parameter required",
-      });
+  try {
+    console.log("Fetching orders for email:", email);
+
+    // 1. Get user_id from email
+    const [userRows] = await db.query("SELECT id FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (userRows.length === 0) {
+      return res.json({ success: false, message: "User not found" });
     }
 
-    // Replace with your actual database query
-    const orders = await db.execute(
-      `
-     SELECT
-    o.*,
-    oi.product_id,
-    oi.quantity,
-    oi.price,
-    p.title as product_name,
-    p.image_url as product_image
-FROM orders o
-JOIN users u ON o.user_id = u.id
-LEFT JOIN order_items oi ON o.id = oi.order_id
-LEFT JOIN products p ON oi.product_id = p.id
-WHERE u.email = ?
-ORDER BY o.created_at DESC;
-      `,
-      [email]
+    const userId = userRows[0].id;
+
+    // 2. Get orders for user_id
+    const [orders] = await db.query(
+      `SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC`,
+      [userId]
     );
-    // LEFT JOIN orders o ON u.id = o.user_id
 
-    // Group orders with their items
-    const groupedOrders = {};
-    orders.forEach((row) => {
-      if (!groupedOrders[row.id]) {
-        groupedOrders[row.id] = {
-          id: row.id,
-          created_at: row.created_at,
-          status: row.status,
-          total_amount: row.total_amount,
-          total_quantity: row.total_quantity,
-          phone: row.phone,
-          address: row.address,
-          items: [],
-        };
-      }
+    // 3. Get order items for each order
+    for (let order of orders) {
+      const [items] = await db.query(
+        `SELECT oi.*, p.title AS product_name, p.image_url AS product_image 
+         FROM order_items oi 
+         JOIN products p ON oi.product_id = p.id 
+         WHERE oi.order_id = ?`,
+        [order.id]
+      );
+      order.items = items;
+    }
 
-      if (row.product_id) {
-        groupedOrders[row.id].items.push({
-          product_name: row.product_name,
-          quantity: row.quantity,
-          price: row.price,
-          product_image: row.product_image,
-        });
-      }
-    });
+    console.log("Orders found:", orders);
 
-    res.json({
-      success: true,
-      orders: Object.values(groupedOrders),
-    });
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch orders",
-    });
+    res.json({ success: true, orders });
+  } catch (err) {
+    console.error("🔥 Error loading user orders:", err);
+    res.json({ success: false, message: "Server error" });
   }
 });
 
-// Add Product Route
-// ✅ FIXED: Add Product with proper response
-
-app.get("/user-orders", async (req, res) => {
-  console.log("🔥 GET /user-orders hit");
-  try {
-    const { email } = req.query;
-
-    if (!email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email parameter is required",
-      });
-    }
-
-    // First, get the user ID from email
-    const userQuery = "SELECT id FROM users WHERE email = ?";
-    const userResult = await queryDatabase(userQuery, [email]);
-
-    if (userResult.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    const userId = userResult[0].id;
-
-    // Get all orders for this user with order items and product details
-    const ordersQuery = `
-      SELECT 
-        o.id,
-        o.user_id,
-        o.phone,
-        o.address,
-        o.total_quantity,
-        o.total_amount,
-        o.status,
-        o.created_at,
-        oi.id as item_id,
-        oi.product_id,
-        oi.quantity as item_quantity,
-        oi.price as item_price,
-        p.title as product_name,
-        p.image_url as product_image
-      FROM orders o
-      LEFT JOIN order_items oi ON o.id = oi.order_id
-      LEFT JOIN products p ON oi.product_id = p.id
-      WHERE o.user_id = ?
-      ORDER BY o.created_at DESC, oi.id ASC
-    `;
-
-    const results = await queryDatabase(ordersQuery, [userId]);
-
-    // Group the results by order ID
-    const ordersMap = new Map();
-
-    results.forEach((row) => {
-      if (!ordersMap.has(row.id)) {
-        ordersMap.set(row.id, {
-          id: row.id,
-          user_id: row.user_id,
-          phone: row.phone,
-          address: row.address,
-          total_quantity: row.total_quantity,
-          total_amount: row.total_amount,
-          status: row.status,
-          created_at: row.created_at,
-          items: [],
-        });
-      }
-
-      // Add item to order if it exists
-      if (row.item_id) {
-        ordersMap.get(row.id).items.push({
-          id: row.item_id,
-          product_id: row.product_id,
-          quantity: row.item_quantity,
-          price: row.item_price,
-          product_name: row.product_name,
-          product_image: row.product_image
-            ? `images/${row.product_image}`
-            : null,
-        });
-      }
-    });
-
-    // Convert map to array
-    const orders = Array.from(ordersMap.values());
-
-    res.json({
-      success: true,
-      message: "Orders fetched successfully",
-      orders: orders,
-    });
-  } catch (error) {
-    console.error("Error fetching user orders:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
-  }
-});
-
-// Helper function to promisify database queries
 function queryDatabase(query, params = []) {
   return new Promise((resolve, reject) => {
     db.query(query, params, (err, results) => {
@@ -749,8 +966,6 @@ function queryDatabase(query, params = []) {
     });
   });
 }
-
-// Alternative version if you prefer using callbacks instead of async/await
 app.get("/user-orders-callback", (req, res) => {
   const { email } = req.query;
 
@@ -898,95 +1113,6 @@ app.post("/api/products", express.json(), async (req, res) => {
       success: false,
       message: "Database error: " + err.message,
     });
-  }
-});
-
-// This route fetches all orders with customer and product details.
-// ✅ FIXED: View Orders API - Updated query to work with your current database structure
-// ✅ UPDATED: Orders API with proper user and product information
-app.get("/api/orders", async (req, res) => {
-  try {
-    console.log("🔥 GET /api/orders hit");
-
-    // Updated query to get user info and product details
-    const [rows] = await db.query(`
-      SELECT 
-        o.id AS order_id,
-        u.full_name AS customer_name,
-        u.email AS customer_email,
-        o.phone AS customer_phone,
-        o.address AS customer_address,
-        o.total_amount,
-        o.total_quantity,
-        o.status,
-        o.created_at,
-        GROUP_CONCAT(
-          DISTINCT CONCAT(p.title, ' (Qty: ', oi.quantity, ')')
-          ORDER BY p.title 
-          SEPARATOR ', '
-        ) AS product_details
-      FROM orders o
-      LEFT JOIN users u ON o.user_id = u.id
-      LEFT JOIN order_items oi ON o.id = oi.order_id
-      LEFT JOIN products p ON oi.product_id = p.id
-      GROUP BY 
-        o.id, u.full_name, u.email, o.phone, o.address, 
-        o.total_amount, o.total_quantity, o.status, o.created_at
-      ORDER BY o.created_at DESC
-    `);
-
-    console.log("🔍 Orders fetched:", rows.length);
-    res.json(rows);
-  } catch (err) {
-    console.error("❌ Error fetching orders:", err.message);
-    res.status(500).json({ message: "Database error", error: err.message });
-  }
-});
-
-// ✅ NEW: Get single order details
-app.get("/api/orders/:id", async (req, res) => {
-  try {
-    const orderId = req.params.id;
-
-    const [orderRows] = await db.query(
-      `
-      SELECT 
-        o.*,
-        u.full_name AS customer_name,
-        u.email AS customer_email
-      FROM orders o
-      LEFT JOIN users u ON o.user_id = u.id
-      WHERE o.id = ?
-    `,
-      [orderId]
-    );
-
-    if (orderRows.length === 0) {
-      return res.status(404).json({ message: "Order not found" });
-    }
-
-    const [itemRows] = await db.query(
-      `
-      SELECT 
-        oi.*,
-        p.title AS product_title,
-        p.image_url AS product_image
-      FROM order_items oi
-      LEFT JOIN products p ON oi.product_id = p.id
-      WHERE oi.order_id = ?
-    `,
-      [orderId]
-    );
-
-    const order = {
-      ...orderRows[0],
-      items: itemRows,
-    };
-
-    res.json(order);
-  } catch (err) {
-    console.error("❌ Error fetching order details:", err.message);
-    res.status(500).json({ message: "Database error", error: err.message });
   }
 });
 app.listen(PORT, () => {

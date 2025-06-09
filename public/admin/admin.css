@@ -91,10 +91,10 @@ nav a:hover {
   background-color: var(--lux-hover-success);
 }
 .ul {
-    display: flex;
-    list-style: none;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+  display: flex;
+  list-style: none;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 form {
   display: grid;
@@ -145,6 +145,7 @@ table th {
     flex-direction: column;
     gap: 0.5rem;
     margin-top: 0.5rem;
+    margin-left: -2.4rem;
   }
 
   form {
@@ -167,4 +168,79 @@ table tr:hover {
 table td img {
   max-width: 50px;
   border-radius: 6px;
+}
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #2e7d32;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.home-btn:hover {
+  background-color: #1b5e20;
+}
+
+.home-btn i {
+  font-size: 16px;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #2e7d32;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.home-nav-btn:hover {
+  background-color: #1b5e20;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.danger-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.danger-btn:hover {
+  background-color: #c82333;
+}
+
+.modal-footer {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  text-align: right;
+}
+
+.fas {
+  font-size: 16px;
 }

@@ -4,36 +4,162 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shivansh Krushi Seva Kendra</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <meta
       name="description"
-      content="Shivansh Krushi Seva Kendra provides high-quality organic farming products including seeds, fertilizers, and tools to help farmers grow healthy and sustainable crops. Serving Tulanga Bk., Akola and nearby regions with reliable service and support."
+      content="Get in touch with Shivansh Krushi Seva Kendra – your trusted source for organic farming solutions, expert advice, and quality agricultural products."
     />
+    <title>Account | Shivansh Krushi Seva Kendra</title>
+    <link rel="icon" href="images/logo.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="images/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="images/logo.png" type="images/x-icon" />
-    <link rel="apple-touch-icon" href="images/logo.png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
     <style>
-      main {
+      /* ...existing styles from your file... */
+      .container {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 30px;
+        background-color: #fdfdfd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-family: "Poppins", sans-serif;
+      }
+      .container h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+      form {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 80vh;
-        font-size: 2rem;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      input[type="tel"],
+      select,
+      textarea {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+      }
+      button[type="submit"],
+      button {
+        padding: 10px;
+        background-color: #28a745;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      button[type="submit"]:hover,
+      button:hover {
+        background-color: #218838;
+      }
+      h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
         color: #333;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+      }
+      #userDetails {
+        text-align: center;
+      }
+      #userDetails p {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+      a {
+        color: #28a745;
+        text-decoration: none;
+      }
+      .orders-section {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fdfdfd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .orders-section h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+      .order-card {
+        border: 1px solid #ddd;
+        margin: 15px 0;
+        padding: 20px;
+        border-radius: 8px;
+        background: #f9f9f9;
+      }
+      .order-card h3 {
+        color: #2e7d32;
+        margin-bottom: 10px;
+      }
+      .order-items {
+        background: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+      .order-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .item-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-right: 15px;
+      }
+      .item-details {
+        flex: 1;
+      }
+      .status-pending {
+        color: #ff9800;
+        font-weight: bold;
+      }
+      .status-confirmed {
+        color: #2196f3;
+        font-weight: bold;
+      }
+      .status-shipped {
+        color: #9c27b0;
+        font-weight: bold;
+      }
+      .status-delivered {
+        color: #4caf50;
+        font-weight: bold;
+      }
+      .status-cancelled {
+        color: #f44336;
+        font-weight: bold;
       }
     </style>
   </head>
-
   <body>
     <!-- Navbar -->
     <nav class="navbar">
@@ -43,16 +169,193 @@
         <li><a href="products.html">Products</a></li>
         <li><a href="contact-us.html">Contact</a></li>
         <li><a href="cart.html">Cart</a></li>
-        <li><a href="account.html">Account</a></li>
+        <li><a href="#">Account</a></li>
       </ul>
       <div class="hamburger" id="hamburger">
         <i class="fas fa-bars"></i>
       </div>
     </nav>
 
-    <main>
-      <h3>Comming Soon</h3>
-    </main>
+    <div class="container">
+      <h2>Account Portal</h2>
+
+      <!-- User Dashboard -->
+      <div
+        id="userDetails"
+        style="
+          display: none;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+          background-color: #fff;
+          max-width: 500px;
+          margin: auto;
+          margin-top: 10px;
+        "
+      >
+        <h2 style="margin-bottom: 0.5rem">
+          Welcome back, <span id="username" style="color: #007bff"></span>!
+        </h2>
+        <p style="margin-bottom: 1.5rem; font-size: 14px; color: #555">
+          We're happy to see you again. Let's get back to shopping.
+        </p>
+        <div style="margin-bottom: 1.5rem">
+          <label
+            for="addressInput"
+            style="display: block; font-weight: 600; margin-bottom: 5px"
+            >🏠 Your Default Address:</label
+          >
+          <textarea
+            id="addressInput"
+            rows="3"
+            placeholder="Enter your delivery address..."
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 6px;
+              border: 1px solid #ccc;
+              resize: vertical;
+            "
+          ></textarea>
+          <button
+            onclick="saveAddress()"
+            style="
+              margin-top: 8px;
+              background-color: #007bff;
+              color: white;
+              padding: 8px 16px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+            "
+          >
+            Save Address
+          </button>
+          <button
+            onclick="updateAddress()"
+            style="
+              margin-top: 8px;
+              background-color: #007bff;
+              color: white;
+              padding: 8px 16px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+            "
+          >
+            Update Address
+          </button>
+          <p
+            id="savedAddress"
+            style="
+              margin-top: 10px;
+              font-size: 14px;
+              color: #28a745;
+              display: none;
+            "
+          >
+            ✔️ Address saved successfully.
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px">
+          <button
+            onclick="logout()"
+            style="
+              background-color: #dc3545;
+              color: white;
+              padding: 8px 16px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+            "
+          >
+            Logout
+          </button>
+          <a
+            href="products.html"
+            style="
+              background-color: #28a745;
+              color: white;
+              text-decoration: none;
+              padding: 8px 16px;
+              border-radius: 6px;
+            "
+            >🛒 Continue Shopping</a
+          >
+        </div>
+      </div>
+
+      <!-- Auth Forms -->
+      <div id="authForms">
+        <!-- Login Form -->
+        <div id="loginSection">
+          <h3>Login</h3>
+          <form id="loginForm">
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Email"
+              required
+              autocomplete="username"
+            />
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Password"
+              required
+              autocomplete="current-password"
+            />
+            <label style="display: block; margin: 8px 0">
+              <input type="checkbox" id="rememberMe" /> Remember Me
+            </label>
+            <button type="submit">Login</button>
+          </form>
+          <p style="text-align: center">
+            Don't have an account?
+            <a href="#" onclick="toggleAuth('signup')">Sign up</a>
+          </p>
+        </div>
+        <!-- Signup Form -->
+        <div id="signupSection" style="display: none">
+          <h3>Sign Up</h3>
+          <form id="signupForm">
+            <input
+              type="text"
+              id="signupName"
+              placeholder="Full Name"
+              required
+            />
+            <input type="email" id="signupEmail" placeholder="Email" required />
+            <input
+              type="password"
+              id="signupPassword"
+              placeholder="Password"
+              required
+            />
+            <input
+              type="password"
+              id="signupConfirmPassword"
+              placeholder="Confirm Password"
+              required
+            />
+            <input type="tel" id="signupPhone" placeholder="Phone" required />
+            <button type="submit">Sign Up</button>
+          </form>
+          <p style="text-align: center">
+            Already have an account?
+            <a href="#" onclick="toggleAuth('login')">Log in</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="orders-section">
+      <h2>My Orders</h2>
+      <div id="ordersContainer">
+        <p>Loading orders...</p>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="site-footer">
@@ -66,7 +369,6 @@
             farmers grow healthy, sustainable crops with confidence.
           </p>
         </div>
-
         <!-- Quick Links -->
         <div class="footer-links">
           <h3>Quick Links</h3>
@@ -77,7 +379,6 @@
             <li><a href="faq.html">Support & FAQs</a></li>
           </ul>
         </div>
-
         <!-- Contact Information -->
         <div class="footer-contact">
           <h3>Contact Us</h3>
@@ -91,7 +392,6 @@
             <a href="mailto:dkachale16@gmail.com">dkachale16@gmail.com</a>
           </p>
         </div>
-
         <!-- Newsletter & Social -->
         <div class="footer-newsletter">
           <h3>Subscribe for Farming Tips & Offers</h3>
@@ -124,13 +424,292 @@
           </div>
         </div>
       </div>
-
-      <!-- Footer Bottom -->
       <div class="footer-bottom">
         <p>© 2025 Shivansh Krushi Seva Kendra. All rights reserved.</p>
         <p><a href="mailto:furangeaditya@gmail.com">Contact Site Builder</a></p>
       </div>
     </footer>
-    <script src="nav.js" defer></script>
+    <script src="nav.js"></script>
+    <script>
+      // Toggle between login and signup forms
+      function toggleAuth(mode) {
+        const login = document.getElementById("loginSection");
+        const signup = document.getElementById("signupSection");
+        if (mode === "signup") {
+          login.style.display = "none";
+          signup.style.display = "block";
+        } else {
+          login.style.display = "block";
+          signup.style.display = "none";
+        }
+      }
+
+      // Signup form handler
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const full_name = document.getElementById("signupName").value;
+          const email = document.getElementById("signupEmail").value;
+          const password = document.getElementById("signupPassword").value;
+          const confirmPassword = document.getElementById(
+            "signupConfirmPassword"
+          ).value;
+          const phone = document.getElementById("signupPhone").value;
+          const role = "customer";
+          if (password !== confirmPassword) {
+            alert("❌ Passwords do not match!");
+            return;
+          }
+          const address = localStorage.getItem("defaultAddress") || "";
+          try {
+            const res = await fetch("/signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                full_name,
+                email,
+                password,
+                phone,
+                role,
+                address,
+              }),
+            });
+            const data = await res.json();
+            alert(data.message);
+            if (data.success) {
+              toggleAuth("login");
+            }
+          } catch (error) {
+            console.error("Signup error:", error);
+            alert("❌ Signup failed. Please try again.");
+          }
+        });
+
+      // Login form handler
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("loginUsername").value.trim();
+          const password = document
+            .getElementById("loginPassword")
+            .value.trim();
+          const rememberMe = document.getElementById("rememberMe").checked;
+          if (!email || !password) {
+            alert("👀 Username and password are required!");
+            return;
+          }
+          try {
+            const res = await fetch("/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username: email, password }),
+            });
+            if (!res.ok) {
+              throw new Error(`Server returned ${res.status}`);
+            }
+            const data = await res.json();
+            if (data.success) {
+              const storage = rememberMe ? localStorage : sessionStorage;
+              storage.setItem("username", data.username); // display name
+              storage.setItem("role", data.role);
+              storage.setItem("userEmail", data.email || email); // always set to email
+              if (data.role === "admin") {
+                window.location.href = "/admin/admin.html";
+              } else {
+                document.getElementById("authForms").style.display = "none";
+                document.getElementById("userDetails").style.display = "block";
+                document.getElementById("username").textContent = data.username;
+                loadUserOrders();
+              }
+            } else {
+              alert(`❌ ${data.message || "Login failed. Please try again."}`);
+            }
+          } catch (err) {
+            console.error("🚨 Login error:", err);
+            alert(
+              "⚠️ Login failed. Please check your connection or try again later."
+            );
+          }
+        });
+
+      // Address management functions
+      function saveAddress() {
+        const address = document.getElementById("addressInput").value.trim();
+        if (address.length < 10) {
+          alert("📭 Please enter a more complete address.");
+          return;
+        }
+        localStorage.setItem("defaultAddress", address);
+        const confirmMsg = document.getElementById("savedAddress");
+        confirmMsg.style.display = "block";
+        setTimeout(() => (confirmMsg.style.display = "none"), 2000);
+      }
+
+      async function updateAddress() {
+        const username =
+          localStorage.getItem("username") ||
+          sessionStorage.getItem("username");
+        const address = document.getElementById("addressInput").value;
+        if (!username) {
+          alert("Please log in first");
+          return;
+        }
+        try {
+          const res = await fetch("/update-address", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, address }),
+          });
+          const data = await res.json();
+          alert(data.message);
+        } catch (error) {
+          console.error("Update address error:", error);
+          alert("❌ Failed to update address. Please try again.");
+        }
+      }
+
+      // Logout function
+      function logout() {
+        fetch("/logout", { method: "GET" })
+          .then(() => {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.reload();
+          })
+          .catch(() => {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.reload();
+          });
+      }
+
+      // Load user orders
+      async function loadUserOrders() {
+        const userEmail =
+          localStorage.getItem("userEmail") ||
+          sessionStorage.getItem("userEmail");
+        if (!userEmail) {
+          document.getElementById("ordersContainer").innerHTML =
+            "<p>Please log in to view your orders.</p>";
+          return;
+        }
+        try {
+          const response = await fetch(
+            `/user-orders?email=${encodeURIComponent(userEmail)}`
+          );
+          const data = await response.json();
+          if (data.success) {
+            displayOrders(data.orders);
+          } else {
+            document.getElementById("ordersContainer").innerHTML =
+              "<p>Failed to load orders: " + data.message + "</p>";
+          }
+        } catch (error) {
+          console.error("❌ Error loading orders:", error);
+          document.getElementById("ordersContainer").innerHTML =
+            "<p>Error loading orders. Please try again.</p>";
+        }
+      }
+
+      // Display orders
+      function displayOrders(orders) {
+        const ordersContainer = document.getElementById("ordersContainer");
+        if (!orders || orders.length === 0) {
+          ordersContainer.innerHTML = "<p>No orders found.</p>";
+          return;
+        }
+        const ordersHTML = orders
+          .map(
+            (order) => `
+            <div class="order-card">
+                <h3>Order #${order.id || "N/A"}</h3>
+                <p><strong>Date:</strong> ${
+                  order.created_at
+                    ? new Date(order.created_at).toLocaleDateString()
+                    : "N/A"
+                }</p>
+                <p><strong>Status:</strong> <span class="status-${
+                  order.status || "pending"
+                }">${(order.status || "pending").toUpperCase()}</span></p>
+                <p><strong>Total Amount:</strong> ₹${
+                  order.total_amount || "0.00"
+                }</p>
+                <p><strong>Total Quantity:</strong> ${
+                  order.total_quantity || 0
+                } items</p>
+                <p><strong>Phone:</strong> ${order.phone || "N/A"}</p>
+                <p><strong>Delivery Address:</strong> ${
+                  order.address || "N/A"
+                }</p>
+                <h4>Ordered Items:</h4>
+                ${
+                  order.items && order.items.length > 0
+                    ? `
+                    <div class="order-items">
+                        ${order.items
+                          .map(
+                            (item) => `
+                            <div class="order-item">
+                                ${
+                                  item.product_image
+                                    ? `<img src="/images/${
+                                        item.product_image
+                                      }" alt="${
+                                        item.product_name || "Product"
+                                      }" class="item-image">`
+                                    : ""
+                                }
+                                <div class="item-details">
+                                    <strong>${
+                                      item.product_name || "Unknown Product"
+                                    }</strong><br>
+                                    Quantity: ${item.quantity || 0}<br>
+                                    Price: ₹${item.price || "0.00"}<br>
+                                    <em>Total: ₹${(
+                                      (item.quantity || 0) * (item.price || 0)
+                                    ).toFixed(2)}</em>
+                                </div>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                `
+                    : "<p>No items found for this order.</p>"
+                }
+            </div>
+        `
+          )
+          .join("");
+        ordersContainer.innerHTML = ordersHTML;
+      }
+
+      // Initialize page
+      window.onload = () => {
+        const username =
+          localStorage.getItem("username") ||
+          sessionStorage.getItem("username");
+        const role =
+          localStorage.getItem("role") || sessionStorage.getItem("role");
+        const userEmail =
+          localStorage.getItem("userEmail") ||
+          sessionStorage.getItem("userEmail");
+        if (username && userEmail) {
+          if (role === "admin") {
+            window.location.href = "/admin/admin.html";
+          } else {
+            document.getElementById("authForms").style.display = "none";
+            document.getElementById("userDetails").style.display = "block";
+            document.getElementById("username").textContent = username;
+            loadUserOrders();
+          }
+        } else {
+          document.getElementById("ordersContainer").innerHTML =
+            "<p>Please log in to view your orders.</p>";
+        }
+      };
+    </script>
   </body>
 </html>

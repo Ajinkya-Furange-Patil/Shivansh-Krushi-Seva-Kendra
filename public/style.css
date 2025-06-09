@@ -2,20 +2,20 @@
 
 /* 🌈 Root: Luxurious Theme Colors */
 :root {
-  --lux-bg: #f8f9f5;
-  --lux-dark-bg: #1c1f2b;
-  --lux-primary: #006d5b;
-  --lux-accent: #20c997;
-  --lux-highlight: #00e6e6;
-  --lux-muted: #e6f0ec;
-  --lux-white: #ffffff;
-  --lux-text: #333333;
-  --lux-footer-bg: #203a43;
-  --lux-card-border: #c8e6c9;
-  --lux-success: #388e3c;
-  --lux-light-success: #66bb6a;
-  --lux-hover-success: #2e7d32;
-  --lux-cream: #f4fdf1;
+  --lux-bg: #f9e0bb; /* Soft cream background */
+  --lux-dark-bg: #884a39; /* Deep brown background */
+  --lux-primary: #ffc26f; /* Golden primary */
+  --lux-accent: #c38154; /* Copper accent */
+  --lux-highlight: #ffc26f; /* Highlight as golden tone */
+  --lux-muted: #faebd7; /* Muted antique white for soft contrast */
+  --lux-white: #ffffff; /* Standard white */
+  --lux-text: #442a1d; /* Deep brown text */
+  --lux-footer-bg: #884a39; /* Match dark background */
+  --lux-card-border: #f5d8b0; /* Soft border for card edges */
+  --lux-success: #c38154; /* Reuse copper for success tone */
+  --lux-light-success: #ffc26f; /* Light golden for success */
+  --lux-hover-success: #a1653c; /* Slightly darker copper hover */
+  --lux-cream: #f9e0bb; /* Soft cream tone reused */
 }
 
 /* 🎯 Reset & Base Styles */
@@ -32,18 +32,19 @@ body {
 }
 
 /* 🔝 Navbar */
+/* 🔝 Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
-  color: var(--lux-white);
+  background: linear-gradient(90deg, #f9e0bb, #ffc26f, #c38154, #884a39, green);
+  color: var(--lux-cream);
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 999;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0,  0,  0,  0.2);
 }
 .navbar .logo {
   font-size: 1.8rem;
@@ -104,23 +105,26 @@ body {
 
 /* 🛒 Product Cards */
 .row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(
+    4,
+    14rem
+  ); /* 4 columns, each 14rem wide fixed */
   justify-content: center;
+  gap: 1rem; /* spacing between cards */
   margin: 2rem 0;
 }
 .card {
   background-color: var(--lux-white);
   border: 1px solid var(--lux-card-border);
   border-radius: 1rem;
-  width: 14rem;
-  margin: 1rem;
+  width: 14rem; /* fixed width */
+  min-height: 400px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
   position: relative;
-  flex: 1 1 200px;
-  min-height: 400px;
 }
+
 .card:hover {
   transform: translateY(-5px);
 }
@@ -417,6 +421,36 @@ main button a {
   .faq-item h3 {
     font-size: 18px;
   }
+  @media (max-width: 768px) {
+    .row {
+      margin-top: 100px;
+      grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
+      place-items: center;
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+    .card {
+      width: 90%; /* slightly smaller than full grid column */
+      min-height: 350px; /* balanced height for tablets */
+    }
+    .card img {
+      height: 180px; /* a bit smaller but still clear */
+    }
+    .card h3 {
+      font-size: 1.2rem;
+      padding: 0.2rem 0;
+    }
+    .card p {
+      font-size: 0.9rem;
+      padding: 0 0.3rem;
+    }
+    .card button {
+      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+      margin: 0.6rem auto;
+      display: block;
+    }
+  }
 }
 /* 📐 Tablet Responsive: 768px - 1024px */
 @media (min-width: 768px) and (max-width: 1024px) {
@@ -499,5 +533,46 @@ main button a {
   }
   .footer-newsletter button {
     flex: 1;
+  }
+  /*  cards */
+  .row {
+    grid-template-columns: repeat(3, 1fr); /* 2 columns, flexible */
+  }
+  .card {
+    width: 100%; /* let card fill the grid column */
+    min-height: 300px;
+  }
+  .card img {
+    height: auto;
+  }
+}
+@media (max-width: 480px) {
+  .row {
+    margin-top: 150px;
+    grid-template-columns: repeat(2, 1fr);
+    place-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  .card {
+    width: 80%;
+    min-height: auto; /* remove fixed height for better flow */
+  }
+  .card img {
+    height: 200px;
+  }
+  .card h3 {
+    font-size: 1rem;
+    padding: 0.1rem 0;
+  }
+  .card p {
+    font-size: 0.7rem;
+    padding: 0 0.3rem;
+  }
+  .card button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.5rem;
+    margin: 0.5rem auto;
+    display: block;
   }
 }

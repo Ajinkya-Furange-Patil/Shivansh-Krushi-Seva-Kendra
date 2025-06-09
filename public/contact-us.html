@@ -22,6 +22,15 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .contact-container .contact-form form input,
+      form textarea {
+        width: 100%;
+        padding: 16px; /* not 100px 😵 */
+        margin-bottom: 20px;
+        box-sizing: border-box;
+      }
+    </style>
   </head>
 
   <body>
@@ -29,6 +38,7 @@
     <nav class="navbar">
       <div class="logo">Shivansh Krushi Seva Kendra</div>
       <ul id="nav-links">
+        <li><a href="#" onclick="logout()">Logout</a></li>
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="contact-us.html" class="active">Contact</a></li>
@@ -86,23 +96,11 @@
             <form action="https://formspree.io/f/mkgwwdzp" method="POST">
               <div style="margin-bottom: 20px">
                 <label for="name">Your Name</label><br />
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  style="width: 100%; padding: 10px"
-                />
+                <input type="text" id="name" name="name" required />
               </div>
               <div style="margin-bottom: 20px">
                 <label for="email">Your Email</label><br />
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  style="width: 100%; padding: 10px"
-                />
+                <input type="email" id="email" name="email" required />
               </div>
               <div style="margin-bottom: 20px">
                 <label for="message">Message</label><br />
@@ -111,7 +109,6 @@
                   name="message"
                   rows="5"
                   required
-                  style="width: 100%; padding: 10px"
                 ></textarea>
               </div>
               <button

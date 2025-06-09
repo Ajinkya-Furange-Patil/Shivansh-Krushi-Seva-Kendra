@@ -1,20 +1,19 @@
 const cartItemsContainer = document.getElementById("cart-items");
 const cartTotalDisplay = document.getElementById("cart-total");
-
 function renderCart() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = `
       <p class="empty-cart">
-        Your cart is empty. <a href="products.html">Go to products</a>
+        Your cart is empty. <a href="products.html" style="text-decoration:none">Go to products</a>
       </p>`;
-    cartTotalDisplay.textContent = '';
+    cartTotalDisplay.textContent = "";
     return;
   }
 
   let total = 0;
-  cartItemsContainer.innerHTML = '';
+  cartItemsContainer.innerHTML = "";
 
   cart.forEach((item, index) => {
     const price = parseInt(item.price.replace("₹", "").trim()) || 0;
@@ -43,14 +42,12 @@ function renderCart() {
 
   cartTotalDisplay.textContent = `Total: ₹${total}`;
 }
-
 function removeItem(index) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
-
 function updateQuantity(index, quantity) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   quantity = parseInt(quantity);
@@ -59,7 +56,6 @@ function updateQuantity(index, quantity) {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
-
 document.getElementById("orderForm").addEventListener("submit", function (e) {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -76,37 +72,56 @@ document.getElementById("orderForm").addEventListener("submit", function (e) {
           <th>Product</th>
           <th>Quantity</th>
           <th>Price</th>
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
+          </tr>
+          </thead>
+          <tbody>
+          `;
+          // <th>Total</th>
 
-  let total = 0;
-  cart.forEach(item => {
+  // let total = 0;
+  cart.forEach((item) => {
     const price = parseInt(item.price.replace("₹", "").trim()) || 0;
-    const quantity = item.quantity || 1;
-    const itemTotal = price * quantity;
-    total += itemTotal;
+    // const quantity = item.quantity || 1;
+    // const itemTotal = price * quantity;
+    // total += itemTotal;
 
     tableHTML += `
       <tr>
         <td>${item.name}</td>
-        <td>${quantity}</td>
+        <td>${item.quantity}</td>
         <td>₹${price}</td>
-        <td>₹${itemTotal}</td>
-      </tr>`;
+        </tr>`;
   });
+  // <td>₹${itemTotal}</td>
 
   tableHTML += `
-      <tr>
-        <td colspan="3" style="text-align:right;font-weight:bold;">Total:</td>
-        <td><strong>₹${total}</strong></td>
-      </tr>
     </tbody>
   </table>`;
 
   document.getElementById("orderHTML").value = tableHTML;
 });
+window.addEventListener("DOMContentLoaded", async () => {
+  const username =
+    localStorage.getItem("username") || sessionStorage.getItem("username");
+  if (!username) return;
 
+  try {
+    const res = await fetch(
+      `/get-user-details?username=${encodeURIComponent(username)}`
+    );
+    const data = await res.json();
+
+    if (res.ok && data) {
+      // ✅ Fill form inputs with backend data
+      document.getElementById("name").value = data.full_name || "";
+      document.getElementById("email").value = data.email || "";
+      document.getElementById("phone").value = data.phone || "";
+      document.getElementById("address").value = data.address || "";
+    } else {
+      console.warn("User data not found:", data.message);
+    }
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+  }
+});
 renderCart();

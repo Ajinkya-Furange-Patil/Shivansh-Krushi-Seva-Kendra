@@ -47,11 +47,11 @@
             <li>
               <button id="viewOrdersBtn" class="lux-button">View Orders</button>
             </li>
-            <li>
+            <!-- <li>
               <button id="viewNotificationsBtn" class="lux-button">
                 View Notifications
               </button>
-            </li>
+            </li> -->
           </ul>
         </aside>
 
@@ -169,7 +169,7 @@
               style="display: none"
             >
               <h2>Customer Orders</h2>
-              <div id="ordersList" class="overflow-x-auto">
+              <div id="orders-container" class="overflow-x-auto">
                 <table>
                   <thead>
                     <tr>
@@ -185,6 +185,17 @@
                       <th>Status</th>
                     </tr>
                   </thead>
+                  <div class="filter-container">
+                    <label for="orderStatusFilter">Filter by Status:</label>
+                    <select id="orderStatusFilter" class="status-filter">
+                      <option value="all">All Orders</option>
+                      <option value="pending">Pending</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
                   <tbody id="ordersTableBody">
                     <!-- Orders will be injected here -->
                   </tbody>
@@ -233,4 +244,3 @@
     <script src="admin.js" defer></script>
   </body>
 </html>
-

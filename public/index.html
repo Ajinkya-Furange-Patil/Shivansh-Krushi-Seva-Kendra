@@ -42,6 +42,7 @@
     <nav class="navbar">
       <div class="logo">Shivansh Krushi Seva Kendra</div>
       <ul id="nav-links">
+        <li><a href="#" onclick="logout()">Logout</a></li>
         <li><a href="#">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="contact-us.html">Contact</a></li>
@@ -80,43 +81,14 @@
       <!-- Slideshow Section (empty for now) -->
       <section id="slideShowImages"></section>
 
-      <!-- Product Cards -->
-      <section>
-        <div class="row">
-          <div class="card">
-            <img src="images/CropSaff.webp" alt="Crop Staff" />
-            <h3>Crop Saff</h3>
-            <p>₹320</p>
-            <button>Add To Cart</button>
-          </div>
-          <div class="card">
-            <img
-              src="images/Guard(Crystal).webp"
-              alt="Guard (Crystal)"
-              height="250rem"
-            />
-            <h3>Guard Crystal</h3>
-            <p>₹950</p>
-            <button>Add To Cart</button>
-          </div>
-          <div class="card">
-            <img src="images/shaked.webp" alt="Shaked" height="250rem" />
-            <h3>SHAKED HERBICIDE ME</h3>
-            <p>₹1050</p>
-            <button>Add To Cart</button>
-          </div>
-          <div class="card">
-            <img
-              src="images/Targa Super.webp"
-              alt="Targa Super"
-              height="250rem"
-            />
-            <h3>Targa Super</h3>
-            <p>₹740</p>
-            <button>Add To Cart</button>
-          </div>
+      <!-- Main Content -->
+    <main style="margin-top: 100px">
+      <section class="product-section">
+        <div class="row" id="product-container">
+          <!-- Dynamic products will be injected here -->
         </div>
       </section>
+    </main>
       <button>
         <a href="products.html"> Discover More Products</a>
       </button>
@@ -143,9 +115,9 @@
           <div class="text">
             <h3>Contact Information</h3>
             <div class="info-text">
-              <span
-                > Dynaneshwar Devendra Kachale, Near Maruti Mandir, Tulanga Bk.,
-            Akola, Maharastra, India</span
+              <span></span>
+                Dynaneshwar Devendra Kachale, Near Maruti Mandir, Tulanga Bk.,
+                Akola, Maharastra, India</span
               ><br />
               <span>Phone:+91 9011102731</span>
               <p>
@@ -263,34 +235,60 @@
     <script src="nav.js" defer></script>
 
     <script>
-      document.querySelectorAll(".card button").forEach((button) => {
-        button.addEventListener("click", () => {
-          const card = button.closest(".card");
-          const name = card.querySelector("h3").innerText;
-          const price = card.querySelector("p").innerText;
-          const img = card.querySelector("img").src;
+      document.addEventListener("DOMContentLoaded", () => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        const container = document.getElementById("product-container");
 
-          let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        // Limit to 4 products
+        const featured = data.slice(0, 4);
 
-          // Check if product already exists in cart
-          const existingProductIndex = cart.findIndex(
-            (item) => item.name === name
-          );
-
-          if (existingProductIndex !== -1) {
-            // If found, increase quantity by 1
-            cart[existingProductIndex].quantity =
-              (cart[existingProductIndex].quantity || 1) + 1;
-          } else {
-            // If not found, add new product with quantity 1
-            cart.push({ name, price, img, quantity: 1 });
-          }
-
-          localStorage.setItem("cart", JSON.stringify(cart));
-
-          window.location.href = "cart.html";
+        featured.forEach((product) => {
+          const card = `
+            <div class="card">
+              <img src="images/${product.image_url}" alt="${product.title}" />
+              <h3>${product.title}</h3>
+              <p>₹${product.price}</p>
+              <p>${product.description}</p>
+              <button>Add To Cart</button>
+            </div>
+          `;
+          container.innerHTML += card;
         });
+      })
+      .catch((err) => {
+        console.error("❌ Failed to load products:", err);
       });
+  });
+        document
+          .getElementById("product-container")
+          .addEventListener("click", (e) => {
+            if (e.target.tagName === "BUTTON") {
+              const card = e.target.closest(".card");
+              const name = card.querySelector("h3").innerText;
+              const price = card.querySelector("p").innerText.replace("₹", "");
+              const img = card.querySelector("img").src;
+
+              let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+              // Check if product already exists in cart
+              const existingProductIndex = cart.findIndex(
+                (item) => item.name === name
+              );
+
+              if (existingProductIndex !== -1) {
+                cart[existingProductIndex].quantity =
+                  (cart[existingProductIndex].quantity || 1) + 1;
+              } else {
+                cart.push({ name, price, img, quantity: 1 });
+              }
+
+              localStorage.setItem("cart", JSON.stringify(cart));
+              window.location.href = "cart.html";
+            }
+          });
+  
     </script>
   </body>
 </html>

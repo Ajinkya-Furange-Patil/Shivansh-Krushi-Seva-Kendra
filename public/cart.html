@@ -191,6 +191,8 @@
     <nav class="navbar">
       <div class="logo">Shivansh Krushi Seva Kendra</div>
       <ul id="nav-links">
+        <li><a href="#" onclick="logout()">Logout</a></li>
+
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="contact-us.html">Contact</a></li>
@@ -208,10 +210,15 @@
 
       <form id="orderForm" action="/send-order" method="POST">
         <h3>Enter Your Details</h3>
-        <input name="name" required placeholder="Your Name" />
-        <input name="phone" required placeholder="Phone" />
-        <input name="email" required placeholder="Email" />
-        <textarea name="address" required placeholder="Your Address"></textarea>
+        <input name="name" id="name" required placeholder="Your Name" />
+        <input name="phone" id="phone" required placeholder="Phone" />
+        <input name="email" id="email" required placeholder="Email" />
+        <textarea
+          name="address"
+          id="address"
+          required
+          placeholder="Your Address"
+        ></textarea>
 
         <!-- Cart order HTML -->
         <input type="hidden" name="orderHTML" id="orderHTML" />
